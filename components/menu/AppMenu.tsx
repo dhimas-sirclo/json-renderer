@@ -14,6 +14,10 @@ export default function AppMenu() {
     setAnchorEl(null);
   };
 
+  const handleShortcutClick = () => {
+    // TODO: call app mutation
+  };
+
   return (
     <div>
       <IconButton
@@ -42,7 +46,7 @@ export default function AppMenu() {
           horizontal: "left",
         }}
       >
-        <MenuItem>SIRCLO Store</MenuItem>
+        <MenuItem onClick={handleShortcutClick}>SIRCLO Store</MenuItem>
       </Menu>
     </div>
   );

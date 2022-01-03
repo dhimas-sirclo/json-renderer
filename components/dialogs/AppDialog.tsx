@@ -42,6 +42,7 @@ function AppDialog({ data, onClose, open }: AppDialogProps) {
       <Formik<Values>
         initialValues={initialValues}
         onSubmit={async (values) => {
+          // TODO: call app mutation
           alert(
             JSON.stringify(
               { actionId: data.action.id, data: JSON.stringify(values) },
