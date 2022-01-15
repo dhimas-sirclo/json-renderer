@@ -4,7 +4,10 @@ const executeShortcut = gql`
   mutation executeShortcut($input: ExecuteShortcutInput!) {
     executeShortcut(input: $input) {
       type @client
-      title @client
+      title {
+        text @client
+        icon @client
+      }
       action {
         id @client
         buttons {

@@ -139,9 +139,15 @@ export type Test = {
   id: Scalars['ID'];
 };
 
+export type Title = {
+  __typename?: 'Title';
+  icon?: Maybe<Scalars['String']>;
+  text?: Maybe<Scalars['String']>;
+};
+
 export type UntitledAction = {
   __typename?: 'UntitledAction';
-  buttons: Array<UntitledButton>;
+  buttons?: Maybe<Array<UntitledButton>>;
   id: Scalars['ID'];
 };
 
@@ -155,7 +161,7 @@ export type UntitledResponse = {
   __typename?: 'UntitledResponse';
   action?: Maybe<UntitledAction>;
   blocks?: Maybe<Array<Block>>;
-  title?: Maybe<Scalars['String']>;
+  title?: Maybe<Title>;
   type: Scalars['String'];
 };
 
@@ -164,21 +170,21 @@ export type ExecuteActionMutationVariables = Exact<{
 }>;
 
 
-export type ExecuteActionMutation = { __typename?: 'Mutation', executeAction?: { __typename?: 'UntitledResponse', type: string, title?: string | null | undefined, action?: { __typename?: 'UntitledAction', id: string, buttons: Array<{ __typename?: 'UntitledButton', type?: string | null | undefined, label: string }> } | null | undefined, blocks?: Array<{ __typename?: 'Block', type: string, input?: { __typename?: 'BlockInput', type: string, name: string, label?: string | null | undefined, options?: Array<{ __typename?: 'BlockInputOption', label: string, value: string }> | null | undefined } | null | undefined }> | null | undefined } | null | undefined };
+export type ExecuteActionMutation = { __typename?: 'Mutation', executeAction?: { __typename?: 'UntitledResponse', type: string, title?: { __typename?: 'Title', text?: string | null | undefined, icon?: string | null | undefined } | null | undefined, action?: { __typename?: 'UntitledAction', id: string, buttons?: Array<{ __typename?: 'UntitledButton', type?: string | null | undefined, label: string }> | null | undefined } | null | undefined, blocks?: Array<{ __typename?: 'Block', type: string, input?: { __typename?: 'BlockInput', type: string, name: string, label?: string | null | undefined, options?: Array<{ __typename?: 'BlockInputOption', label: string, value: string }> | null | undefined } | null | undefined }> | null | undefined } | null | undefined };
 
 export type ExecuteShortcutMutationVariables = Exact<{
   input: ExecuteShortcutInput;
 }>;
 
 
-export type ExecuteShortcutMutation = { __typename?: 'Mutation', executeShortcut?: { __typename?: 'UntitledResponse', type: string, title?: string | null | undefined, action?: { __typename?: 'UntitledAction', id: string, buttons: Array<{ __typename?: 'UntitledButton', type?: string | null | undefined, label: string }> } | null | undefined, blocks?: Array<{ __typename?: 'Block', type: string, input?: { __typename?: 'BlockInput', type: string, name: string, label?: string | null | undefined, options?: Array<{ __typename?: 'BlockInputOption', label: string, value: string }> | null | undefined } | null | undefined }> | null | undefined } | null | undefined };
+export type ExecuteShortcutMutation = { __typename?: 'Mutation', executeShortcut?: { __typename?: 'UntitledResponse', type: string, title?: { __typename?: 'Title', text?: string | null | undefined, icon?: string | null | undefined } | null | undefined, action?: { __typename?: 'UntitledAction', id: string, buttons?: Array<{ __typename?: 'UntitledButton', type?: string | null | undefined, label: string }> | null | undefined } | null | undefined, blocks?: Array<{ __typename?: 'Block', type: string, input?: { __typename?: 'BlockInput', type: string, name: string, label?: string | null | undefined, options?: Array<{ __typename?: 'BlockInputOption', label: string, value: string }> | null | undefined } | null | undefined }> | null | undefined } | null | undefined };
 
 export type ExecuteSlashCommandMutationVariables = Exact<{
   input: ExecuteSlashCommandInput;
 }>;
 
 
-export type ExecuteSlashCommandMutation = { __typename?: 'Mutation', executeSlashCommand?: { __typename?: 'UntitledResponse', type: string, title?: string | null | undefined, action?: { __typename?: 'UntitledAction', id: string, buttons: Array<{ __typename?: 'UntitledButton', type?: string | null | undefined, label: string }> } | null | undefined, blocks?: Array<{ __typename?: 'Block', type: string, input?: { __typename?: 'BlockInput', type: string, name: string, label?: string | null | undefined, options?: Array<{ __typename?: 'BlockInputOption', label: string, value: string }> | null | undefined } | null | undefined }> | null | undefined } | null | undefined };
+export type ExecuteSlashCommandMutation = { __typename?: 'Mutation', executeSlashCommand?: { __typename?: 'UntitledResponse', type: string, title?: { __typename?: 'Title', text?: string | null | undefined, icon?: string | null | undefined } | null | undefined, action?: { __typename?: 'UntitledAction', id: string, buttons?: Array<{ __typename?: 'UntitledButton', type?: string | null | undefined, label: string }> | null | undefined } | null | undefined, blocks?: Array<{ __typename?: 'Block', type: string, input?: { __typename?: 'BlockInput', type: string, name: string, label?: string | null | undefined, options?: Array<{ __typename?: 'BlockInputOption', label: string, value: string }> | null | undefined } | null | undefined }> | null | undefined } | null | undefined };
 
 export type GetAppShortcutsQueryVariables = Exact<{
   filter: ApplicationShortcutsFilter;
@@ -199,7 +205,10 @@ export const ExecuteActionDocument = gql`
     mutation executeAction($input: ExecuteActionInput!) {
   executeAction(input: $input) {
     type @client
-    title @client
+    title {
+      text @client
+      icon @client
+    }
     action {
       id @client
       buttons {
@@ -252,7 +261,10 @@ export const ExecuteShortcutDocument = gql`
     mutation executeShortcut($input: ExecuteShortcutInput!) {
   executeShortcut(input: $input) {
     type @client
-    title @client
+    title {
+      text @client
+      icon @client
+    }
     action {
       id @client
       buttons {
@@ -305,7 +317,10 @@ export const ExecuteSlashCommandDocument = gql`
     mutation executeSlashCommand($input: ExecuteSlashCommandInput!) {
   executeSlashCommand(input: $input) {
     type @client
-    title @client
+    title {
+      text @client
+      icon @client
+    }
     action {
       id @client
       buttons {

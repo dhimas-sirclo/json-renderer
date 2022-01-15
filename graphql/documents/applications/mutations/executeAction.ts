@@ -4,12 +4,18 @@ const executeAction = gql`
   mutation executeAction($input: ExecuteActionInput!) {
     executeAction(input: $input) {
       type @client
-      title @client
+      title {
+        text @client
+        icon @client
+      }
       action {
         id @client
         buttons {
           type @client
           label @client
+          action {
+            id @client
+          }
         }
       }
       blocks {

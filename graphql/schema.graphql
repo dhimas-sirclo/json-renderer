@@ -85,7 +85,7 @@ type UntitledButton {
 }
 
 type UntitledAction {
-  id: ID!
+  id: ID
   buttons: [UntitledButton!]!
 }
 
@@ -108,9 +108,14 @@ type Block {
 
 type UntitledResponse {
   type: String!
-  title: String
+  title: Title
   action: UntitledAction
   blocks: [Block!]
+}
+
+type Title {
+  text: String
+  icon: String
 }
 
 extend type Mutation {

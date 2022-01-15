@@ -6,8 +6,11 @@ import {
   DialogContent,
   DialogTitle,
 } from "@mui/material";
-import { BlocksBuilder } from "..";
+import { useMutation } from "@apollo/client";
 import { Formik, Form, Field } from "formik";
+
+import { BlocksBuilder } from "..";
+import executeAction from "../../graphql/documents/applications/mutations/executeAction";
 
 const emails = ["username@gmail.com", "user02@gmail.com"];
 
@@ -22,6 +25,14 @@ interface Values {
 }
 
 function AppDialog({ data, onClose, open }: AppDialogProps) {
+  const [dialogData, setDialogData] = useState(data);
+
+  const [action] = useMutation(executeAction, {
+    onCompleted(data) {
+      setDialogData(data.executeAction);
+    },
+  });
+
   const initialValues = data.blocks.reduce(
     (
       obj: Values,
@@ -37,40 +48,68 @@ function AppDialog({ data, onClose, open }: AppDialogProps) {
     },
     {} as Values
   );
+
+  const handleOnClick = (type: string, id?: string) => () => {
+    switch (type) {
+      case "cancel":
+        onClose();
+        break;
+      case "button":
+        action({
+          variables: {
+            input: {
+              appId: "chat",
+              tenantId: "chat",
+              brandId: "chat",
+              roomId: "chat",
+              action: id,
+            },
+          },
+        });
+        break;
+      default:
+        break;
+    }
+  };
+
   return (
     <Dialog onClose={onClose} open={open} fullWidth maxWidth="sm">
       <Formik<Values>
         initialValues={initialValues}
         onSubmit={async (values) => {
-          // TODO: call app mutation
-          alert(
-            JSON.stringify(
-              { actionId: data.action.id, data: JSON.stringify(values) },
-              null,
-              2
-            )
-          );
+          action({
+            variables: {
+              input: {
+                appId: "chat",
+                tenantId: "chat",
+                brandId: "chat",
+                roomId: "chat",
+                action: dialogData.action.id,
+                data: JSON.stringify(values),
+              },
+            },
+          });
         }}
       >
         {({ isSubmitting }) => (
           <Form>
-            <DialogTitle>App Title</DialogTitle>
+            <DialogTitle>{dialogData.title.text}</DialogTitle>
             <DialogContent>
-              <BlocksBuilder data={data.blocks} />
+              <BlocksBuilder data={dialogData.blocks} />
             </DialogContent>
             <DialogActions>
-              {data.action.buttons.map(
-                (action: { [key: string]: any }, i: number) => {
+              {dialogData.action.buttons.map(
+                (button: { [key: string]: any }, i: number) => {
                   return (
                     <Button
                       key={i}
-                      type={action.type === "cancel" ? "button" : action.type}
-                      onClick={action.type === "cancel" ? onClose : undefined}
-                      disabled={action.type === "submit" && isSubmitting}
+                      type={button.type === "cancel" ? "button" : button.type}
+                      onClick={handleOnClick(button.type, button.action?.id)}
+                      disabled={button.type === "submit" && isSubmitting}
                     >
-                      {action.type === "submit" && isSubmitting
+                      {button.type === "submit" && isSubmitting
                         ? "Loading..."
-                        : action.label}
+                        : button.label}
                     </Button>
                   );
                 }

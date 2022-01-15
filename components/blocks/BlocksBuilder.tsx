@@ -73,7 +73,8 @@ export default function BlocksBuilder({ data, direction }: BlocksBuilderProps) {
             );
             break;
           case "text":
-            children = <Typography></Typography>;
+            children = <Typography>{text.body}</Typography>;
+            break;
           case "container":
             return (
               <BlocksBuilder

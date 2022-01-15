@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import type { NextPage } from "next";
 import {
   Box,
@@ -7,151 +8,34 @@ import {
   InputAdornment,
   IconButton,
 } from "@mui/material";
-import { AppDialog } from "../components";
-import { AttachFile, EmojiEmotions, MoreVert, Send } from "@mui/icons-material";
-import { AppMenu } from "../components/menu";
+import { AttachFile, EmojiEmotions, Send } from "@mui/icons-material";
+import { useQuery } from "@apollo/client";
 
-const data: { [key: string]: any } = {
-  type: "dialog",
-  title: "App Title",
-  action: {
-    id: "searchProduct",
-    buttons: [
-      {
-        type: "cancel",
-        label: "Back",
-      },
-      {
-        type: "submit",
-        label: "Search",
-      },
-    ],
-  },
-  blocks: [
-    // {
-    //   type: "input",
-    //   input: {
-    //     type: "text",
-    //     name: "firstName",
-    //   },
-    // },
-    // {
-    //   type: "input",
-    //   input: {
-    //     type: "text",
-    //     name: "lastName",
-    //   },
-    // },
-    // {
-    //   type: "input",
-    //   input: {
-    //     type: "text",
-    //     name: "address",
-    //     label: "Alamat",
-    //   },
-    // },
-    // {
-    //   type: "input",
-    //   input: {
-    //     type: "password",
-    //     name: "password",
-    //   },
-    // },
-    // {
-    //   type: "input",
-    //   input: {
-    //     type: "textarea",
-    //     name: "textarea",
-    //   },
-    // },
-    // {
-    //   type: "input",
-    //   input: {
-    //     type: "select",
-    //     name: "select",
-    //     options: [
-    //       {
-    //         value: "option-1",
-    //         label: "Option 1",
-    //       },
-    //       {
-    //         value: "option-2",
-    //         label: "Option 2",
-    //       },
-    //     ],
-    //   },
-    // },
-    // {
-    //   type: "input",
-    //   input: {
-    //     type: "checkbox",
-    //     name: "checkbox",
-    //     options: [
-    //       {
-    //         value: "option-1",
-    //         label: "Option 1",
-    //       },
-    //       {
-    //         value: "option-2",
-    //         label: "Option 2",
-    //       },
-    //     ],
-    //   },
-    // },
-    // {
-    //   type: "input",
-    //   input: {
-    //     type: "radio",
-    //     name: "radio",
-    //     options: [
-    //       {
-    //         value: "option-1",
-    //         label: "Option 1",
-    //       },
-    //       {
-    //         value: "option-2",
-    //         label: "Option 2",
-    //       },
-    //     ],
-    //   },
-    // },
-    {
-      type: "text",
-      text: {
-        body: "Cari Produk",
-      },
-    },
-    {
-      type: "container",
-      container: {
-        direction: "row",
-        blocks: [
-          {
-            type: "input",
-            input: {
-              label: "Cari Produk",
-              name: "query",
-              type: "text",
-            },
-          },
-          {
-            type: "button",
-            button: {
-              type: "button",
-              label: "Cari",
-              action: {
-                id: "searchProduct",
-                withFormData: true,
-              },
-            },
-          },
-        ],
-      },
-    },
-  ],
-};
+import { AppDialog } from "../components";
+import { AppMenu } from "../components/menu";
+import getAppBlocks from "../graphql/documents/applications/queries/getAppBlocks";
 
 const Home: NextPage = () => {
+  const [blocksData, setBlocksData] = useState();
+
+  const { data, loading } = useQuery(getAppBlocks, {
+    variables: {
+      filter: {
+        appId: "chat",
+        blocksId: "searchProductDialog",
+      },
+    },
+  });
+
+  useEffect(() => {
+    if (!data) return;
+    setBlocksData(data.applicationBlocks);
+  }, [data]);
+
+  if (loading || !blocksData) {
+    return <>Loading...</>;
+  }
+
   return (
     <>
       <Paper square elevation={1}>
@@ -159,12 +43,12 @@ const Home: NextPage = () => {
           <Box sx={{ marginBottom: "20px" }}>
             <Typography component="pre">
               <Box sx={{ fontFamily: "monospace" }}>
-                {JSON.stringify(data, null, 2)}
+                {JSON.stringify(blocksData, null, 2)}
               </Box>
             </Typography>
           </Box>
           <Box sx={{ marginBottom: "20px" }}>
-            <AppDialog data={data} />
+            <AppDialog data={blocksData} />
           </Box>
           <Box sx={{ marginBottom: "20px" }}>
             <TextField

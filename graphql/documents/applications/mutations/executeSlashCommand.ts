@@ -4,7 +4,10 @@ const executeSlashCommand = gql`
   mutation executeSlashCommand($input: ExecuteSlashCommandInput!) {
     executeSlashCommand(input: $input) {
       type @client
-      title @client
+      title {
+        text @client
+        icon @client
+      }
       action {
         id @client
         buttons {
