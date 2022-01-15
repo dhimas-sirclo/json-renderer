@@ -1,0 +1,121 @@
+type Test {
+  id: ID!
+}
+
+input InstalledApplicationsFilter {
+  tenantIds: [String!]
+  brandIds: [String!]
+  communicationChannels: [String!]
+  """
+  ACTIVE,
+  """
+  status: [String!]
+}
+
+input ApplicationShortcutsFilter {
+  appId: ID!
+  """
+  ACTIVE,
+  """
+  status: [String!]
+}
+
+type ApplicationShortcut {
+  id: ID!
+  title: String!
+  shortcut: String!
+  description: String!
+}
+
+type InstalledApplication {
+  id: ID!
+  title: String!
+  description: String!
+}
+
+extend type Query {
+  test: Test!
+  applicationShortcuts(
+    filter: ApplicationShortcutsFilter
+  ): [ApplicationShortcut]
+  installedApplications(
+    filter: InstalledApplicationsFilter
+  ): [InstalledApplication]
+}
+
+input ExecuteActionInput {
+  appId: ID!
+  tenantId: ID!
+  brandId: ID!
+  roomId: ID!
+  action: String!
+  """
+  JSON String
+  """
+  data: String
+}
+
+input ExecuteShortcutInput {
+  appId: ID!
+  tenantId: ID!
+  brandId: ID!
+  roomId: ID!
+  shortcut: String!
+  """
+  JSON String
+  """
+  data: String
+}
+
+input ExecuteSlashCommandInput {
+  appId: ID!
+  tenantId: ID!
+  brandId: ID!
+  roomId: ID!
+  command: String!
+  """
+  JSON String
+  """
+  data: String
+}
+
+type UntitledButton {
+  type: String
+  label: String!
+}
+
+type UntitledAction {
+  id: ID!
+  buttons: [UntitledButton!]!
+}
+
+type BlockInputOption {
+  label: String!
+  value: String!
+}
+
+type BlockInput {
+  type: String!
+  name: String!
+  label: String
+  options: [BlockInputOption!]
+}
+
+type Block {
+  type: String!
+  input: BlockInput
+}
+
+type UntitledResponse {
+  type: String!
+  title: String
+  action: UntitledAction
+  blocks: [Block!]
+}
+
+extend type Mutation {
+  test: Test!
+  executeAction(input: ExecuteActionInput!): UntitledResponse
+  executeShortcut(input: ExecuteShortcutInput!): UntitledResponse
+  executeSlashCommand(input: ExecuteSlashCommandInput!): UntitledResponse
+}
