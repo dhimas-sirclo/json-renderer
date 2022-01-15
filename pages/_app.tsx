@@ -1,3 +1,4 @@
+import React from "react";
 import { AppProps } from "next/app";
 import CssBaseline from "@mui/material/CssBaseline";
 import Layout from "../components/layout";

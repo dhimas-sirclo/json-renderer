@@ -32,3 +32,10 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+
+## if we want to use PUG
+
+- Still can't figure out how to use it with .tsx, only works with .js/.jsx
+- App server need to know styling rules or use inline-style, and it can disrupt design uniformity
+- App server need to know ui library used by FE
+- If pug template passed to component props or children, it's rendered as string.
