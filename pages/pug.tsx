@@ -27,14 +27,14 @@ const Pug: NextPage = () => {
 
       <FromParams
         template={`Box
-    Typography Hello World!
+    Typography Passed to props.template!
     Button(onClick=props.onClick) Click Me`}
       />
 
       <hr />
 
       <AsChildren>{`Box
-    Typography Hello World!
+    Typography Passed to props.children!
     Button(onClick=props.onClick) Click Me`}</AsChildren>
 
       <hr />
