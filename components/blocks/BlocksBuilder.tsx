@@ -1,16 +1,18 @@
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import CheckBox from "../inputs/Checkbox";
 import Radio from "../inputs/Radio";
 import TextField from "../inputs/TextField";
+import Button from "../button/Button";
 
 export interface BlocksBuilderProps {
   data: { [key: string]: any }[];
+  direction?: "row" | "column";
 }
 
-export default function BlocksBuilder({ data }: BlocksBuilderProps) {
+export default function BlocksBuilder({ data, direction }: BlocksBuilderProps) {
   return (
-    <Box display="flex" flexDirection="column">
-      {data.map(({ type, input }, key) => {
+    <Box display="flex" flexDirection={direction ? direction : "column"}>
+      {data.map(({ type, input, button, container, text }, key) => {
         let children = <></>;
         switch (type) {
           case "input":
@@ -63,19 +65,45 @@ export default function BlocksBuilder({ data }: BlocksBuilderProps) {
                 break;
             }
             break;
-          case "display":
-            children = <></>;
+          case "button":
+            children = (
+              <Button action={button.action} type={button.type}>
+                {button.label}
+              </Button>
+            );
             break;
-          case "layout":
-            children = <></>;
-            break;
+          case "text":
+            children = <Typography></Typography>;
+          case "container":
+            return (
+              <BlocksBuilder
+                direction={container.direction}
+                data={container.blocks}
+              />
+            );
+          // case "display":
+          //   children = <></>;
+          //   break;
+          // case "layout":
+          //   children = <></>;
+          //   break;
           default:
             children = <></>;
             break;
         }
 
         return (
-          <Box key={key} sx={{ margin: "10px 0px" }}>
+          <Box
+            key={key}
+            sx={
+              type !== "button"
+                ? {
+                    margin: "10px 0px",
+                    width: "100%",
+                  }
+                : { margin: "10px 0px" }
+            }
+          >
             {children}
           </Box>
         );

@@ -28,89 +28,122 @@ const data: { [key: string]: any } = {
     ],
   },
   blocks: [
+    // {
+    //   type: "input",
+    //   input: {
+    //     type: "text",
+    //     name: "firstName",
+    //   },
+    // },
+    // {
+    //   type: "input",
+    //   input: {
+    //     type: "text",
+    //     name: "lastName",
+    //   },
+    // },
+    // {
+    //   type: "input",
+    //   input: {
+    //     type: "text",
+    //     name: "address",
+    //     label: "Alamat",
+    //   },
+    // },
+    // {
+    //   type: "input",
+    //   input: {
+    //     type: "password",
+    //     name: "password",
+    //   },
+    // },
+    // {
+    //   type: "input",
+    //   input: {
+    //     type: "textarea",
+    //     name: "textarea",
+    //   },
+    // },
+    // {
+    //   type: "input",
+    //   input: {
+    //     type: "select",
+    //     name: "select",
+    //     options: [
+    //       {
+    //         value: "option-1",
+    //         label: "Option 1",
+    //       },
+    //       {
+    //         value: "option-2",
+    //         label: "Option 2",
+    //       },
+    //     ],
+    //   },
+    // },
+    // {
+    //   type: "input",
+    //   input: {
+    //     type: "checkbox",
+    //     name: "checkbox",
+    //     options: [
+    //       {
+    //         value: "option-1",
+    //         label: "Option 1",
+    //       },
+    //       {
+    //         value: "option-2",
+    //         label: "Option 2",
+    //       },
+    //     ],
+    //   },
+    // },
+    // {
+    //   type: "input",
+    //   input: {
+    //     type: "radio",
+    //     name: "radio",
+    //     options: [
+    //       {
+    //         value: "option-1",
+    //         label: "Option 1",
+    //       },
+    //       {
+    //         value: "option-2",
+    //         label: "Option 2",
+    //       },
+    //     ],
+    //   },
+    // },
     {
-      type: "input",
-      input: {
-        type: "text",
-        name: "firstName",
+      type: "text",
+      text: {
+        body: "Cari Produk",
       },
     },
     {
-      type: "input",
-      input: {
-        type: "text",
-        name: "lastName",
-      },
-    },
-    {
-      type: "input",
-      input: {
-        type: "text",
-        name: "address",
-        label: "Alamat",
-      },
-    },
-    {
-      type: "input",
-      input: {
-        type: "password",
-        name: "password",
-      },
-    },
-    {
-      type: "input",
-      input: {
-        type: "textarea",
-        name: "textarea",
-      },
-    },
-    {
-      type: "input",
-      input: {
-        type: "select",
-        name: "select",
-        options: [
+      type: "container",
+      container: {
+        direction: "row",
+        blocks: [
           {
-            value: "option-1",
-            label: "Option 1",
+            type: "input",
+            input: {
+              label: "Cari Produk",
+              name: "query",
+              type: "text",
+            },
           },
           {
-            value: "option-2",
-            label: "Option 2",
-          },
-        ],
-      },
-    },
-    {
-      type: "input",
-      input: {
-        type: "checkbox",
-        name: "checkbox",
-        options: [
-          {
-            value: "option-1",
-            label: "Option 1",
-          },
-          {
-            value: "option-2",
-            label: "Option 2",
-          },
-        ],
-      },
-    },
-    {
-      type: "input",
-      input: {
-        type: "radio",
-        name: "radio",
-        options: [
-          {
-            value: "option-1",
-            label: "Option 1",
-          },
-          {
-            value: "option-2",
-            label: "Option 2",
+            type: "button",
+            button: {
+              type: "button",
+              label: "Cari",
+              action: {
+                id: "searchProduct",
+                withFormData: true,
+              },
+            },
           },
         ],
       },

@@ -1,5 +1,5 @@
 import { useField } from "formik";
-import { MenuItem, TextField as MuiTextField } from "@mui/material";
+import { MenuItem, TextField as MuiTextField, Box } from "@mui/material";
 import type { TextFieldProps as MuiTextFieldProps } from "@mui/material";
 import { startCase } from "lodash";
 
@@ -24,20 +24,18 @@ export default function TextField({
   const [input, meta, helpers] = useField(name);
 
   return (
-    <>
-      <MuiTextField
-        label={label ?? startCase(name)}
-        select={select}
-        {...props}
-        {...input}
-      >
-        {select &&
-          (options ?? []).map((option) => (
-            <MenuItem key={option.value} value={option.value}>
-              {option.label}
-            </MenuItem>
-          ))}
-      </MuiTextField>
-    </>
+    <MuiTextField
+      label={label ?? startCase(name)}
+      select={select}
+      {...props}
+      {...input}
+    >
+      {select &&
+        (options ?? []).map((option) => (
+          <MenuItem key={option.value} value={option.value}>
+            {option.label}
+          </MenuItem>
+        ))}
+    </MuiTextField>
   );
 }
