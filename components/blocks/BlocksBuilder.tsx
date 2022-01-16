@@ -1,4 +1,6 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, TypographyVariant } from "@mui/material";
+import Image from "next/image";
+
 import CheckBox from "../inputs/Checkbox";
 import Radio from "../inputs/Radio";
 import TextField from "../inputs/TextField";
@@ -11,14 +13,34 @@ export interface BlocksBuilderProps {
 
 export default function BlocksBuilder({ data, direction }: BlocksBuilderProps) {
   return (
-    <Box display="flex" flexDirection={direction ? direction : "column"}>
-      {data.map(({ type, input, button, container, text }, key) => {
+    <Box
+      display="flex"
+      flexDirection={direction ? direction : "column"}
+      alignItems="center"
+      width="100%"
+    >
+      {data.map(({ type, input, button, container, text, image }, key) => {
         let children = <></>;
         switch (type) {
           case "input":
             switch (input.type) {
               case "text":
                 children = <TextField fullWidth key={key} name={input.name} />;
+                break;
+              case "number":
+                children = (
+                  <TextField
+                    key={key}
+                    name={input.name}
+                    sx={{ width: 70, height: 40 }}
+                    type="number"
+                    InputProps={{
+                      inputProps: {
+                        min: input.negativeValue ? undefined : 0,
+                      },
+                    }}
+                  />
+                );
                 break;
               case "password":
                 children = (
@@ -73,7 +95,30 @@ export default function BlocksBuilder({ data, direction }: BlocksBuilderProps) {
             );
             break;
           case "text":
-            children = <Typography>{text.body}</Typography>;
+            let textType: TypographyVariant = "body1";
+            switch (text.type) {
+              case "heading":
+                textType = "h6";
+                break;
+              default:
+                if (text.type) textType = text.type;
+                break;
+            }
+            children = (
+              <Typography sx={{ fontWeight: text.weight }} variant={textType}>
+                {text.body}
+              </Typography>
+            );
+            break;
+          case "image":
+            children = (
+              <Image
+                src={image.src}
+                alt={image.alt}
+                width={image.width ?? 0}
+                height={image.height ?? 0}
+              />
+            );
             break;
           case "container":
             return (
@@ -82,12 +127,6 @@ export default function BlocksBuilder({ data, direction }: BlocksBuilderProps) {
                 data={container.blocks}
               />
             );
-          // case "display":
-          //   children = <></>;
-          //   break;
-          // case "layout":
-          //   children = <></>;
-          //   break;
           default:
             children = <></>;
             break;
@@ -99,10 +138,10 @@ export default function BlocksBuilder({ data, direction }: BlocksBuilderProps) {
             sx={
               type !== "button"
                 ? {
-                    margin: "10px 0px",
+                    marginBottom: "5px",
                     width: "100%",
                   }
-                : { margin: "10px 0px" }
+                : { marginBottom: "5px" }
             }
           >
             {children}

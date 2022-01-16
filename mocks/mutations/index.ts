@@ -57,8 +57,10 @@ const mutations: MockedResponse[] = [
                   {
                     type: "image",
                     image: {
-                      src: "imageUrl",
+                      src: "https://source.unsplash.com/random/50×50",
                       alt: "alt",
+                      width: 50,
+                      height: 50,
                     },
                   },
                   {
@@ -116,8 +118,10 @@ const mutations: MockedResponse[] = [
                   {
                     type: "image",
                     image: {
-                      src: "imageUrl",
+                      src: "https://source.unsplash.com/random/50×50",
                       alt: "alt",
+                      width: 50,
+                      height: 50,
                     },
                   },
                   {
