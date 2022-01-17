@@ -12,7 +12,7 @@ import { AttachFile, EmojiEmotions, Send } from "@mui/icons-material";
 // import { useQuery } from "@apollo/client";
 
 // import { AppDialog } from "../components";
-import { AppMenu } from "../components/application/menu";
+import AppMenu from "../components/application/menu/AppMenu";
 // import getAppBlocks from "../graphql/documents/applications/queries/getAppBlocks";
 
 const Home: NextPage = () => {

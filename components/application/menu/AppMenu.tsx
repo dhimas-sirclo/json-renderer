@@ -10,7 +10,7 @@ import {
   useGetAppShortcutsLazyQuery,
   useGetInstalledAppsLazyQuery,
 } from "../../../graphql";
-import { OPEN_APP_DIALOG, useAppDialogCtx } from "../dialogs";
+import { OPEN_APP_DIALOG, useAppDialogCtx } from "../dialogs/AppDialogCtx";
 
 const defaultMenuItems = [
   <MenuItem key="not-found" disabled>

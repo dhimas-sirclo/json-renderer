@@ -10,7 +10,7 @@ import {
 import { Formik, Form } from "formik";
 
 import { useAppDialogCtx, CLOSE_APP_DIALOG } from "./AppDialogCtx";
-import { BlocksBuilder } from "../../index";
+import BlocksBuilder from "../blocks/BlocksBuilder";
 
 export default function AppDialog() {
   const { state, dispatch } = useAppDialogCtx();
@@ -78,7 +78,7 @@ export default function AppDialog() {
               </Box>
             </DialogTitle>
             <DialogContent>
-              {/* <BlocksBuilder data={state?.data?.blocks} /> */}
+              <BlocksBuilder data={state?.data?.blocks} />
             </DialogContent>
             <DialogActions>
               {(state?.data?.action?.buttons ?? []).map(
