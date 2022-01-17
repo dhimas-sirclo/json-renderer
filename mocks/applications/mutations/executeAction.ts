@@ -1,8 +1,9 @@
 import type { MockedResponse } from "@apollo/client/testing";
 import { GraphQLError } from "graphql";
 import { ExecuteActionDocument } from "../../../graphql";
+import multiply from "../../utils/multiply";
 
-const searchProduct: MockedResponse = {
+const searchProduct = multiply({
   request: {
     query: ExecuteActionDocument,
     variables: {
@@ -50,9 +51,9 @@ const searchProduct: MockedResponse = {
       },
     },
   },
-};
+});
 
-const viewCart: MockedResponse = {
+const viewCart = multiply({
   request: {
     query: ExecuteActionDocument,
     variables: {
@@ -100,7 +101,7 @@ const viewCart: MockedResponse = {
       },
     },
   },
-};
+});
 
 // const networkError: MockedResponse = {
 //   request: {
@@ -118,6 +119,6 @@ const viewCart: MockedResponse = {
 //   },
 // };
 
-const mocks = [searchProduct, viewCart];
+const mocks = [...searchProduct, ...viewCart];
 
 export default mocks;

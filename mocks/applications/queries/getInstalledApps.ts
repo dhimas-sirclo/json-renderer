@@ -1,8 +1,9 @@
 import type { MockedResponse } from "@apollo/client/testing";
 import { GraphQLError } from "graphql";
 import { GetInstalledAppsDocument } from "../../../graphql";
+import multiply from "../../utils/multiply";
 
-const success: MockedResponse = {
+const getInstalledApps = multiply({
   request: {
     query: GetInstalledAppsDocument,
     variables: {
@@ -25,7 +26,7 @@ const success: MockedResponse = {
       ],
     },
   },
-};
+});
 
 // const networkError: MockedResponse = {
 //   request: {
@@ -50,7 +51,7 @@ const success: MockedResponse = {
 // };
 
 const mocks = [
-  success,
+  ...getInstalledApps,
   //networkError,
   //graphqlErrors
 ];

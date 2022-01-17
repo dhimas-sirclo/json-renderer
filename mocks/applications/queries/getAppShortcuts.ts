@@ -1,8 +1,9 @@
 import type { MockedResponse } from "@apollo/client/testing";
 // import { GraphQLError } from "graphql";
 import { GetAppShortcutsDocument } from "../../../graphql";
+import multiply from "../../utils/multiply";
 
-const success: MockedResponse = {
+const getSircloStoreAppShortcuts = multiply({
   request: {
     query: GetAppShortcutsDocument,
     variables: {
@@ -33,7 +34,7 @@ const success: MockedResponse = {
       ],
     },
   },
-};
+});
 
 // const networkError: MockedResponse = {
 //   request: {
@@ -58,7 +59,7 @@ const success: MockedResponse = {
 // };
 
 const mocks = [
-  success,
+  ...getSircloStoreAppShortcuts,
   // networkError,
   // graphqlErrors
 ];
