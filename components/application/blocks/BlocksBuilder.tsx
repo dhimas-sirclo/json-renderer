@@ -96,7 +96,7 @@ export default function BlocksBuilder({
             break;
           case "button":
             children = (
-              <Button action={button.action} type={button.type}>
+              <Button key={key} action={button.action} type={button.type}>
                 {button.label}
               </Button>
             );
@@ -112,7 +112,11 @@ export default function BlocksBuilder({
                 break;
             }
             children = (
-              <Typography sx={{ fontWeight: text.weight }} variant={textType}>
+              <Typography
+                key={key}
+                sx={{ fontWeight: text.weight }}
+                variant={textType}
+              >
                 {text.body}
               </Typography>
             );
@@ -120,16 +124,18 @@ export default function BlocksBuilder({
           case "image":
             children = (
               <Image
+                key={key}
                 src={image.src}
                 alt={image.alt}
-                width={image.width ?? 0}
-                height={image.height ?? 0}
+                width={image.width ?? 50}
+                height={image.height ?? 50}
               />
             );
             break;
           case "container":
             return (
               <BlocksBuilder
+                key={key}
                 direction={container.direction}
                 data={container.blocks}
               />

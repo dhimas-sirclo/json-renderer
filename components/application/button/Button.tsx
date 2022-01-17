@@ -1,5 +1,7 @@
 import { useMutation } from "@apollo/client";
 import { Button as MuiButton } from "@mui/material";
+import { useExecuteActionMutation } from "../../../graphql";
+import { OPEN_APP_DIALOG, useAppDialogCtx } from "../dialogs/AppDialogCtx";
 // import executeAction from "../../graphql/documents/applications/mutations/executeAction";
 
 interface ButtonProps {
@@ -14,23 +16,33 @@ export default function Button({
   children,
   ...props
 }: ButtonProps) {
-  // const [dialogAction] = useMutation(executeAction, {
-  //   onCompleted(data) {},
-  // });
+  const { dispatch } = useAppDialogCtx();
+  const [executeAction] = useExecuteActionMutation({
+    onCompleted: (data) => {
+      console.log(data);
+      dispatch({
+        type: OPEN_APP_DIALOG,
+        payload: {
+          data: data.executeAction ?? undefined,
+        },
+      });
+    },
+  });
 
   const handleAction = () => {
     if (!action) return;
-    // dialogAction({
-    //   variables: {
-    //     input: {
-    //       appId: "chat",
-    //       tenantId: "chat",
-    //       brandId: "chat",
-    //       roomId: "chat",
-    //       action: action.id,
-    //     },
-    //   },
-    // });
+    executeAction({
+      variables: {
+        input: {
+          appId: "sirclo-store-v2",
+          tenantId: "chat",
+          brandId: "chat",
+          roomId: "room",
+          channel: "channel",
+          action: action.id,
+        },
+      },
+    });
   };
 
   return (

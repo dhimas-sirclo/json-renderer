@@ -9,11 +9,28 @@ import {
 } from "@mui/material";
 import { Formik, Form } from "formik";
 
-import { useAppDialogCtx, CLOSE_APP_DIALOG } from "./AppDialogCtx";
+import {
+  useAppDialogCtx,
+  CLOSE_APP_DIALOG,
+  OPEN_APP_DIALOG,
+} from "./AppDialogCtx";
 import BlocksBuilder from "../blocks/BlocksBuilder";
+import { useExecuteActionMutation } from "../../../graphql";
 
 export default function AppDialog() {
   const { state, dispatch } = useAppDialogCtx();
+
+  const [executeAction] = useExecuteActionMutation({
+    onCompleted: (data) => {
+      console.log(data);
+      dispatch({
+        type: OPEN_APP_DIALOG,
+        payload: {
+          data: data.executeAction ?? undefined,
+        },
+      });
+    },
+  });
 
   const handleClose = () => {
     dispatch({
@@ -21,15 +38,30 @@ export default function AppDialog() {
     });
   };
 
-  // const handleClick = (type: string, id?: string) => () => {
-  //   switch (type) {
-  //     case "cancel":
-  //       handleClose();
-  //       break;
-  //     default:
-  //       break;
-  //   }
-  // };
+  const handleClick = (type: string, id?: string) => () => {
+    switch (type) {
+      case "cancel":
+        handleClose();
+        break;
+      case "button":
+        if (!id) return;
+        executeAction({
+          variables: {
+            input: {
+              action: id,
+              appId: "sirclo-store-v2",
+              brandId: "chat",
+              channel: "channel",
+              roomId: "room",
+              tenantId: "chat",
+            },
+          },
+        });
+        break;
+      default:
+        break;
+    }
+  };
 
   return (
     <Dialog
@@ -59,10 +91,29 @@ export default function AppDialog() {
         )}
         onSubmit={async (values) => {
           console.log(values);
+          executeAction({
+            variables: {
+              input: {
+                action: "searchProduct",
+                appId: "sirclo-store-v2",
+                brandId: "chat",
+                channel: "channel",
+                data: JSON.stringify(values),
+                roomId: "room",
+                tenantId: "chat",
+              },
+            },
+          });
         }}
       >
         {({ isSubmitting }) => (
-          <Form>
+          <Form
+            onKeyDown={(keyEvent) => {
+              if ((keyEvent.charCode || keyEvent.keyCode) === 13) {
+                keyEvent.preventDefault();
+              }
+            }}
+          >
             <DialogTitle>
               <Box
                 display="flex"
@@ -87,7 +138,7 @@ export default function AppDialog() {
                     <Button
                       key={i}
                       type={button.type === "cancel" ? "button" : button.type}
-                      // onClick={handleClick(button.type, button.action?.id)}
+                      onClick={handleClick(button.type, button.action?.id)}
                       disabled={button.type === "submit" && isSubmitting}
                     >
                       {button.type === "submit" && isSubmitting

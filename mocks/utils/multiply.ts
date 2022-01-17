@@ -1,12 +1,7 @@
-import { MockedResponse } from "@apollo/client/testing";
-
-export default function (
-  mock: MockedResponse,
-  qty: number = 100
-): MockedResponse[] {
-  let mocks: MockedResponse[] = [];
+export default function multiply<T>(data: T, qty: number = 10): T[] {
+  let datas: T[] = [];
   for (let i = 0; i < qty; i++) {
-    mocks.push(mock);
+    datas.push(data);
   }
-  return mocks;
+  return datas;
 }

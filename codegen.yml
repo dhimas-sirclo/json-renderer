@@ -14,7 +14,6 @@ generates:
       skipTypename: true
       useTypeImports: true
       addUnderscoreToArgsType: true
-      avoidOptionals: true
   ./graphql/introspect.json:
     plugins:
       - "introspection"

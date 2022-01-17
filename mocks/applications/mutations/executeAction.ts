@@ -1,5 +1,6 @@
 import type { MockedResponse } from "@apollo/client/testing";
 import { ExecuteActionDocument } from "../../../graphql";
+import multiply from "../../utils/multiply";
 // import { GraphQLError } from "graphql";
 
 const searchProduct: MockedResponse = {
@@ -21,7 +22,7 @@ const searchProduct: MockedResponse = {
       executeAction: {
         type: "dialog",
         title: {
-          text: "App Display Name",
+          text: "Search Product",
           icon: "https://source.unsplash.com/random/50x50",
         },
         action: {
@@ -31,15 +32,12 @@ const searchProduct: MockedResponse = {
               type: "button",
               label: "View Cart",
               action: {
-                id: "action",
+                id: "viewCart",
               },
             },
             {
-              type: "button",
+              type: "cancel",
               label: "Close",
-              action: {
-                id: "action",
-              },
             },
           ],
         },
@@ -62,7 +60,7 @@ const searchProduct: MockedResponse = {
                 {
                   type: "button",
                   button: {
-                    type: "button",
+                    type: "submit",
                     label: "Search",
                   },
                 },
@@ -70,6 +68,103 @@ const searchProduct: MockedResponse = {
             },
           },
         ],
+      },
+    },
+  },
+};
+
+const searchProductWithData: MockedResponse = {
+  request: {
+    query: ExecuteActionDocument,
+    variables: {
+      input: {
+        action: "searchProduct",
+        appId: "sirclo-store-v2",
+        brandId: "chat",
+        channel: "channel",
+        data: `{\"query\":\"jacket\"}`,
+        roomId: "room",
+        tenantId: "chat",
+      },
+    },
+  },
+  result: {
+    data: {
+      executeAction: {
+        type: "dialog",
+        title: {
+          text: "Search Result",
+          icon: "https://source.unsplash.com/random/50x50",
+        },
+        action: {
+          buttons: [
+            {
+              type: "button",
+              label: "View Cart",
+              action: {
+                id: "viewCart",
+              },
+            },
+            {
+              type: "button",
+              label: "Re-Search",
+              action: {
+                id: "searchProduct",
+              },
+            },
+            {
+              type: "cancel",
+              label: "Close",
+            },
+          ],
+        },
+        blocks: multiply({
+          type: "container",
+          container: {
+            direction: "row",
+            blocks: [
+              {
+                type: "image",
+                image: {
+                  src: "https://source.unsplash.com/random/50x50",
+                  alt: "Product 1",
+                },
+              },
+              {
+                type: "text",
+                text: {
+                  body: "Product 1",
+                },
+              },
+              {
+                type: "text",
+                text: {
+                  body: "IDR 100.000,00",
+                },
+              },
+              {
+                type: "button",
+                button: {
+                  type: "button",
+                  label: "View Product",
+                  action: {
+                    id: "viewProduct",
+                  },
+                },
+              },
+              {
+                type: "button",
+                button: {
+                  type: "button",
+                  label: "Add to Cart",
+                  action: {
+                    id: "addToCart",
+                  },
+                },
+              },
+            ],
+          },
+        }),
       },
     },
   },
@@ -94,18 +189,26 @@ const viewCart: MockedResponse = {
       executeAction: {
         type: "dialog",
         title: {
-          text: "App Display Name",
+          text: "Cart Items",
           icon: "https://source.unsplash.com/random/50x50",
         },
         action: {
-          id: "action",
+          id: "updateCartItems",
           buttons: [
             {
               type: "button",
-              label: "Button",
+              label: "Search Product",
               action: {
-                id: "action",
+                id: "searchProduct",
               },
+            },
+            {
+              type: "cancel",
+              label: "Close",
+            },
+            {
+              type: "submit",
+              label: "Next",
             },
           ],
         },
@@ -141,6 +244,6 @@ const viewCart: MockedResponse = {
 //   },
 // };
 
-const mocks = [searchProduct, viewCart];
+const mocks = [searchProduct, searchProductWithData, viewCart];
 
 export default mocks;
