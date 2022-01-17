@@ -50,19 +50,19 @@ input ExecuteActionInput {
   data: String
 }
 
-type UntitledButtonAction {
+type BlockButtonAction {
   id: String!
 }
 
-type UntitledButton {
+type BlockButtonDetail {
   type: String
   label: String!
-  action: UntitledButtonAction
+  action: BlockButtonAction
 }
 
-type UntitledAction {
+type DialogAction {
   id: ID
-  buttons: [UntitledButton]
+  buttons: [BlockButtonDetail]
 }
 
 type BlockInputOption {
@@ -70,30 +70,63 @@ type BlockInputOption {
   value: String!
 }
 
-type BlockInput {
+type BlockInputDetail {
   type: String!
   name: String!
   label: String
   options: [BlockInputOption!]
 }
 
-type Block {
+union Block = BlockInput | BlockContainer | BlockButton | BlockImage
+
+type BlockContainer {
   type: String!
-  input: BlockInput
+  container: BlockContainerDetail!
 }
 
-type UntitledResponse {
+type BlockContainerDetail {
+  direction: String
+  blocks: [Block!]!
+}
+
+type BlockButton {
   type: String!
-  title: Title
-  action: UntitledAction
+  button: BlockButtonDetail!
+}
+
+type BlockImage {
+  type: String!
+  image: BlockImageDetail!
+}
+
+type BlockImageDetail {
+  src: String!
+  alt: String
+}
+
+type BlockInput {
+  type: String!
+  input: BlockInputDetail
+}
+
+union ActionResponse = AppDialog | AppFeedback
+
+type AppDialog {
+  type: String!
+  title: DialogTitle!
+  action: DialogAction
   blocks: [Block!]
 }
 
-type Title {
+type AppFeedback {
+  type: String!
+}
+
+type DialogTitle {
   text: String
   icon: String
 }
 
 extend type Mutation {
-  executeAction(input: ExecuteActionInput!): UntitledResponse
+  executeAction(input: ExecuteActionInput!): ActionResponse
 }

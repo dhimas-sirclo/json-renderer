@@ -3,30 +3,34 @@ import { gql } from "@apollo/client";
 const executeAction = gql`
   mutation executeAction($input: ExecuteActionInput!) {
     executeAction(input: $input) {
-      type
-      title {
-        text
-        icon
-      }
-      action {
-        id
-        buttons {
-          type
-          label
-          action {
-            id
+      ... on AppDialog {
+        type
+        title {
+          text
+          icon
+        }
+        action {
+          id
+          buttons {
+            type
+            label
+            action {
+              id
+            }
           }
         }
-      }
-      blocks {
-        type
-        input {
-          type
-          name
-          label
-          options {
-            label
-            value
+        blocks {
+          ... on BlockInput {
+            type
+            input {
+              type
+              name
+              label
+              options {
+                label
+                value
+              }
+            }
           }
         }
       }

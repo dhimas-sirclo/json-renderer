@@ -29,7 +29,14 @@ const searchProduct: MockedResponse = {
           buttons: [
             {
               type: "button",
-              label: "Button",
+              label: "View Cart",
+              action: {
+                id: "action",
+              },
+            },
+            {
+              type: "button",
+              label: "Close",
               action: {
                 id: "action",
               },
@@ -38,12 +45,28 @@ const searchProduct: MockedResponse = {
         },
         blocks: [
           {
-            type: "input",
-            input: {
-              type: "text",
-              name: "text",
-              label: "Text",
-              options: [],
+            type: "container",
+            container: {
+              direction: "row",
+              blocks: [
+                {
+                  type: "input",
+                  input: {
+                    type: "text",
+                    name: "query",
+                    label: "Search Product",
+                    placeholder: "Masukkan nama produk atau SKU",
+                    options: [],
+                  },
+                },
+                {
+                  type: "button",
+                  button: {
+                    type: "button",
+                    label: "Search",
+                  },
+                },
+              ],
             },
           },
         ],

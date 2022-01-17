@@ -15,8 +15,20 @@ export type Scalars = {
   Float: number;
 };
 
+export type ActionResponse = AppDialog | AppFeedback;
+
+export type AppDialog = {
+  action: Maybe<DialogAction>;
+  blocks: Maybe<Array<Block>>;
+  title: DialogTitle;
+  type: Scalars['String'];
+};
+
+export type AppFeedback = {
+  type: Scalars['String'];
+};
+
 export type ApplicationShortcut = {
-  __typename?: 'ApplicationShortcut';
   actionId: Scalars['ID'];
   description: Scalars['String'];
   id: Scalars['ID'];
@@ -25,31 +37,75 @@ export type ApplicationShortcut = {
 
 export type ApplicationShortcutsFilter = {
   appId: Scalars['ID'];
-  brandIds?: InputMaybe<Array<Scalars['ID']>>;
-  channels?: InputMaybe<Array<Scalars['ID']>>;
-  roomIds?: InputMaybe<Array<Scalars['ID']>>;
-  status?: InputMaybe<Array<Scalars['String']>>;
-  tenantIds?: InputMaybe<Array<Scalars['ID']>>;
+  brandIds: InputMaybe<Array<Scalars['ID']>>;
+  channels: InputMaybe<Array<Scalars['ID']>>;
+  roomIds: InputMaybe<Array<Scalars['ID']>>;
+  status: InputMaybe<Array<Scalars['String']>>;
+  tenantIds: InputMaybe<Array<Scalars['ID']>>;
 };
 
-export type Block = {
-  __typename?: 'Block';
-  input?: Maybe<BlockInput>;
+export type Block = BlockButton | BlockContainer | BlockImage | BlockInput;
+
+export type BlockButton = {
+  button: BlockButtonDetail;
   type: Scalars['String'];
 };
 
+export type BlockButtonAction = {
+  id: Scalars['String'];
+};
+
+export type BlockButtonDetail = {
+  action: Maybe<BlockButtonAction>;
+  label: Scalars['String'];
+  type: Maybe<Scalars['String']>;
+};
+
+export type BlockContainer = {
+  container: BlockContainerDetail;
+  type: Scalars['String'];
+};
+
+export type BlockContainerDetail = {
+  blocks: Array<Block>;
+  direction: Maybe<Scalars['String']>;
+};
+
+export type BlockImage = {
+  image: BlockImageDetail;
+  type: Scalars['String'];
+};
+
+export type BlockImageDetail = {
+  alt: Maybe<Scalars['String']>;
+  src: Scalars['String'];
+};
+
 export type BlockInput = {
-  __typename?: 'BlockInput';
-  label?: Maybe<Scalars['String']>;
+  input: Maybe<BlockInputDetail>;
+  type: Scalars['String'];
+};
+
+export type BlockInputDetail = {
+  label: Maybe<Scalars['String']>;
   name: Scalars['String'];
-  options?: Maybe<Array<BlockInputOption>>;
+  options: Maybe<Array<BlockInputOption>>;
   type: Scalars['String'];
 };
 
 export type BlockInputOption = {
-  __typename?: 'BlockInputOption';
   label: Scalars['String'];
   value: Scalars['String'];
+};
+
+export type DialogAction = {
+  buttons: Maybe<Array<Maybe<BlockButtonDetail>>>;
+  id: Maybe<Scalars['ID']>;
+};
+
+export type DialogTitle = {
+  icon: Maybe<Scalars['String']>;
+  text: Maybe<Scalars['String']>;
 };
 
 export type ExecuteActionInput = {
@@ -58,82 +114,47 @@ export type ExecuteActionInput = {
   brandId: Scalars['ID'];
   channel: Scalars['ID'];
   /** JSON String */
-  data?: InputMaybe<Scalars['String']>;
+  data: InputMaybe<Scalars['String']>;
   roomId: Scalars['ID'];
   tenantId: Scalars['ID'];
 };
 
 export type InstalledApplication = {
-  __typename?: 'InstalledApplication';
   description: Scalars['String'];
   id: Scalars['ID'];
   title: Scalars['String'];
 };
 
 export type InstalledApplicationsFilter = {
-  brandIds?: InputMaybe<Array<Scalars['ID']>>;
-  channels?: InputMaybe<Array<Scalars['ID']>>;
-  roomIds?: InputMaybe<Array<Scalars['ID']>>;
-  status?: InputMaybe<Array<Scalars['String']>>;
-  tenantIds?: InputMaybe<Array<Scalars['ID']>>;
+  brandIds: InputMaybe<Array<Scalars['ID']>>;
+  channels: InputMaybe<Array<Scalars['ID']>>;
+  roomIds: InputMaybe<Array<Scalars['ID']>>;
+  status: InputMaybe<Array<Scalars['String']>>;
+  tenantIds: InputMaybe<Array<Scalars['ID']>>;
 };
 
 export type Mutation = {
-  __typename?: 'Mutation';
-  executeAction?: Maybe<UntitledResponse>;
+  executeAction: Maybe<ActionResponse>;
 };
 
 
-export type MutationExecuteActionArgs = {
+export type Mutation_ExecuteActionArgs = {
   input: ExecuteActionInput;
 };
 
 export type Query = {
-  __typename?: 'Query';
-  applicationShortcuts?: Maybe<Array<Maybe<ApplicationShortcut>>>;
-  installedApplications?: Maybe<Array<Maybe<InstalledApplication>>>;
+  applicationShortcuts: Maybe<Array<Maybe<ApplicationShortcut>>>;
+  installedApplications: Maybe<Array<Maybe<InstalledApplication>>>;
 };
 
 
-export type QueryApplicationShortcutsArgs = {
-  filter?: InputMaybe<ApplicationShortcutsFilter>;
+export type Query_ApplicationShortcutsArgs = {
+  filter: InputMaybe<ApplicationShortcutsFilter>;
 };
 
 
-export type QueryInstalledApplicationsArgs = {
-  filter?: InputMaybe<InstalledApplicationsFilter>;
-};
-
-export type Title = {
-  __typename?: 'Title';
-  icon?: Maybe<Scalars['String']>;
-  text?: Maybe<Scalars['String']>;
-};
-
-export type UntitledAction = {
-  __typename?: 'UntitledAction';
-  buttons?: Maybe<Array<Maybe<UntitledButton>>>;
-  id?: Maybe<Scalars['ID']>;
-};
-
-export type UntitledButton = {
-  __typename?: 'UntitledButton';
-  action?: Maybe<UntitledButtonAction>;
-  label: Scalars['String'];
-  type?: Maybe<Scalars['String']>;
-};
-
-export type UntitledButtonAction = {
-  __typename?: 'UntitledButtonAction';
-  id: Scalars['String'];
-};
-
-export type UntitledResponse = {
-  __typename?: 'UntitledResponse';
-  action?: Maybe<UntitledAction>;
-  blocks?: Maybe<Array<Block>>;
-  title?: Maybe<Title>;
-  type: Scalars['String'];
+export type Query_InstalledApplicationsArgs = {
+  filter: InputMaybe<InstalledApplicationsFilter>;
 };
 
 export type ExecuteActionMutationVariables = Exact<{
@@ -141,50 +162,54 @@ export type ExecuteActionMutationVariables = Exact<{
 }>;
 
 
-export type ExecuteActionMutation = { __typename?: 'Mutation', executeAction?: { __typename?: 'UntitledResponse', type: string, title?: { __typename?: 'Title', text?: string | null | undefined, icon?: string | null | undefined } | null | undefined, action?: { __typename?: 'UntitledAction', id?: string | null | undefined, buttons?: Array<{ __typename?: 'UntitledButton', type?: string | null | undefined, label: string, action?: { __typename?: 'UntitledButtonAction', id: string } | null | undefined } | null | undefined> | null | undefined } | null | undefined, blocks?: Array<{ __typename?: 'Block', type: string, input?: { __typename?: 'BlockInput', type: string, name: string, label?: string | null | undefined, options?: Array<{ __typename?: 'BlockInputOption', label: string, value: string }> | null | undefined } | null | undefined }> | null | undefined } | null | undefined };
+export type ExecuteActionMutation = { executeAction: { type: string, title: { text: string | null | undefined, icon: string | null | undefined }, action: { id: string | null | undefined, buttons: Array<{ type: string | null | undefined, label: string, action: { id: string } | null | undefined } | null | undefined> | null | undefined } | null | undefined, blocks: Array<{ type: string, input: { type: string, name: string, label: string | null | undefined, options: Array<{ label: string, value: string }> | null | undefined } | null | undefined } | {}> | null | undefined } | {} | null | undefined };
 
 export type GetAppShortcutsQueryVariables = Exact<{
   filter: ApplicationShortcutsFilter;
 }>;
 
 
-export type GetAppShortcutsQuery = { __typename?: 'Query', applicationShortcuts?: Array<{ __typename?: 'ApplicationShortcut', id: string, title: string, description: string, actionId: string } | null | undefined> | null | undefined };
+export type GetAppShortcutsQuery = { applicationShortcuts: Array<{ id: string, title: string, description: string, actionId: string } | null | undefined> | null | undefined };
 
 export type GetInstalledAppsQueryVariables = Exact<{
-  filter?: InputMaybe<InstalledApplicationsFilter>;
+  filter: InputMaybe<InstalledApplicationsFilter>;
 }>;
 
 
-export type GetInstalledAppsQuery = { __typename?: 'Query', installedApplications?: Array<{ __typename?: 'InstalledApplication', id: string, title: string, description: string } | null | undefined> | null | undefined };
+export type GetInstalledAppsQuery = { installedApplications: Array<{ id: string, title: string, description: string } | null | undefined> | null | undefined };
 
 
 export const ExecuteActionDocument = gql`
     mutation executeAction($input: ExecuteActionInput!) {
   executeAction(input: $input) {
-    type
-    title {
-      text
-      icon
-    }
-    action {
-      id
-      buttons {
-        type
-        label
-        action {
-          id
+    ... on AppDialog {
+      type
+      title {
+        text
+        icon
+      }
+      action {
+        id
+        buttons {
+          type
+          label
+          action {
+            id
+          }
         }
       }
-    }
-    blocks {
-      type
-      input {
-        type
-        name
-        label
-        options {
-          label
-          value
+      blocks {
+        ... on BlockInput {
+          type
+          input {
+            type
+            name
+            label
+            options {
+              label
+              value
+            }
+          }
         }
       }
     }
@@ -292,3 +317,34 @@ export function useGetInstalledAppsLazyQuery(baseOptions?: Apollo.LazyQueryHookO
 export type GetInstalledAppsQueryHookResult = ReturnType<typeof useGetInstalledAppsQuery>;
 export type GetInstalledAppsLazyQueryHookResult = ReturnType<typeof useGetInstalledAppsLazyQuery>;
 export type GetInstalledAppsQueryResult = Apollo.QueryResult<GetInstalledAppsQuery, GetInstalledAppsQueryVariables>;
+
+      export type PossibleTypesResultData = {
+  "possibleTypes": {
+    "ActionResponse": [
+      "AppDialog",
+      "AppFeedback"
+    ],
+    "Block": [
+      "BlockButton",
+      "BlockContainer",
+      "BlockImage",
+      "BlockInput"
+    ]
+  }
+};
+      const result: PossibleTypesResultData = {
+  "possibleTypes": {
+    "ActionResponse": [
+      "AppDialog",
+      "AppFeedback"
+    ],
+    "Block": [
+      "BlockButton",
+      "BlockContainer",
+      "BlockImage",
+      "BlockInput"
+    ]
+  }
+};
+      export default result;
+    

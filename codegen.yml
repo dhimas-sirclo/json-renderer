@@ -7,6 +7,14 @@ generates:
       - "typescript"
       - "typescript-operations"
       - "typescript-react-apollo"
-  ./graphql.schema.json:
+      - "fragment-matcher"
+    config:
+      apolloClientVersion: 3
+      useExplicitTyping: true
+      skipTypename: true
+      useTypeImports: true
+      addUnderscoreToArgsType: true
+      avoidOptionals: true
+  ./graphql/introspect.json:
     plugins:
       - "introspection"
