@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Button,
   Dialog,
@@ -8,23 +8,32 @@ import {
 } from "@mui/material";
 import { Formik, Form } from "formik";
 
-import { BlocksBuilder } from "..";
+import { useAppDialogCtx, CLOSE_APP_DIALOG } from "./AppDialogCtx";
+import { BlocksBuilder } from "../../index";
 // import executeAction from "../../graphql/documents/applications/mutations/executeAction";
 
-const emails = ["username@gmail.com", "user02@gmail.com"];
+// const emails = ["username@gmail.com", "user02@gmail.com"];
 
-export interface AppDialogProps {
-  data: { [key: string]: any };
-  open: boolean;
-  onClose: () => void;
-}
+// export interface AppDialogProps {
+//   data: { [key: string]: any };
+//   open: boolean;
+//   onClose: () => void;
+// }
 
-interface Values {
-  [key: string]: any;
-}
+// interface iData {
+//   [key: string]: any;
+// }
 
-function AppDialog({ data, onClose, open }: AppDialogProps) {
-  const [dialogData, setDialogData] = useState(data);
+export default function AppDialog() {
+  const {
+    state: { open = false, data = {} },
+    dispatch,
+  } = useAppDialogCtx();
+
+  // const [initialValues, setInitialValues] = useState<{ [key: string]: any }>(
+  //   {}
+  // );
+  // const [dialogData, setDialogData] = useState(data);
 
   // const [action] = useMutation(executeAction, {
   //   onCompleted(data) {
@@ -32,9 +41,9 @@ function AppDialog({ data, onClose, open }: AppDialogProps) {
   //   },
   // });
 
-  const initialValues = data.blocks.reduce(
+  const initialValues = (data.blocks ?? []).reduce(
     (
-      obj: Values,
+      obj: { [key: string]: any },
       { type, input }: { type: string; input: { name: string; type: string } }
     ) => {
       if (type !== "input") {
@@ -45,13 +54,19 @@ function AppDialog({ data, onClose, open }: AppDialogProps) {
         [input.name]: input.type === "checkbox" ? [] : "",
       };
     },
-    {} as Values
+    {} as { [key: string]: any }
   );
+
+  const handleClose = () => {
+    dispatch({
+      type: CLOSE_APP_DIALOG,
+    });
+  };
 
   const handleOnClick = (type: string, id?: string) => () => {
     switch (type) {
       case "cancel":
-        onClose();
+        handleClose();
         break;
       case "button":
         // action({
@@ -72,8 +87,8 @@ function AppDialog({ data, onClose, open }: AppDialogProps) {
   };
 
   return (
-    <Dialog onClose={onClose} open={open} fullWidth maxWidth="sm">
-      <Formik<Values>
+    <Dialog onClose={handleClose} open={open} fullWidth maxWidth="sm">
+      <Formik<{ [key: string]: any }>
         initialValues={initialValues}
         onSubmit={async (values) => {
           // action({
@@ -92,12 +107,17 @@ function AppDialog({ data, onClose, open }: AppDialogProps) {
       >
         {({ isSubmitting }) => (
           <Form>
-            <DialogTitle>{dialogData.title.text}</DialogTitle>
+            <DialogTitle>
+              Test
+              {/* {dialogData.title.text} */}
+            </DialogTitle>
             <DialogContent>
-              <BlocksBuilder data={dialogData.blocks} />
+              Test
+              {/* <BlocksBuilder data={dialogData.blocks} /> */}
             </DialogContent>
             <DialogActions>
-              {dialogData.action.buttons.map(
+              Test
+              {/* {dialogData.action.buttons.map(
                 (button: { [key: string]: any }, i: number) => {
                   return (
                     <Button
@@ -112,7 +132,7 @@ function AppDialog({ data, onClose, open }: AppDialogProps) {
                     </Button>
                   );
                 }
-              )}
+              )} */}
             </DialogActions>
           </Form>
         )}
@@ -121,27 +141,27 @@ function AppDialog({ data, onClose, open }: AppDialogProps) {
   );
 }
 
-export interface DialogButtonProps {
-  data: { [key: string]: any };
-}
+// export interface DialogButtonProps {
+//   data: { [key: string]: any };
+// }
 
-export default function DialogButton({ data }: DialogButtonProps) {
-  const [open, setOpen] = useState(false);
+// export default function DialogButton({ data }: DialogButtonProps) {
+//   const [open, setOpen] = useState(false);
 
-  const handleClick = () => {
-    setOpen((prev) => !prev);
-  };
+//   const handleClick = () => {
+//     setOpen((prev) => !prev);
+//   };
 
-  const handleClose = () => {
-    setOpen(false);
-  };
+//   const handleClose = () => {
+//     setOpen(false);
+//   };
 
-  return (
-    <div>
-      <Button color="primary" variant="contained" onClick={handleClick}>
-        Open App Dialog
-      </Button>
-      <AppDialog data={data} open={open} onClose={handleClose} />
-    </div>
-  );
-}
+//   return (
+//     <div>
+//       <Button color="primary" variant="contained" onClick={handleClick}>
+//         Open App Dialog
+//       </Button>
+//       <AppDialog data={data} open={open} onClose={handleClose} />
+//     </div>
+//   );
+// }

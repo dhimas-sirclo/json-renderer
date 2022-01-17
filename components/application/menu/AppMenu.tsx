@@ -8,7 +8,8 @@ import {
   InstalledApplication,
   useGetAppShortcutsLazyQuery,
   useGetInstalledAppsLazyQuery,
-} from "../../graphql";
+} from "../../../graphql";
+import { OPEN_APP_DIALOG, useAppDialogCtx } from "../dialogs";
 
 const defaultMenuItems = [
   <MenuItem key="not-found" disabled>
@@ -17,6 +18,8 @@ const defaultMenuItems = [
 ];
 
 export default function AppMenu() {
+  const { dispatch } = useAppDialogCtx();
+
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
@@ -102,7 +105,9 @@ export default function AppMenu() {
             <MenuItem
               key={appShortcut?.id}
               onClick={() => {
-                console.log(appShortcut);
+                dispatch({
+                  type: OPEN_APP_DIALOG,
+                });
               }}
             >
               {appShortcut?.title}
@@ -111,7 +116,7 @@ export default function AppMenu() {
         })
       );
     });
-  }, [getAppShortcutsData]);
+  }, [getAppShortcutsData, dispatch]);
 
   useEffect(() => {
     if (!selectedApp) {
@@ -159,7 +164,9 @@ export default function AppMenu() {
               <MenuItem
                 key={appShortcut?.id}
                 onClick={() => {
-                  console.log(appShortcut);
+                  dispatch({
+                    type: OPEN_APP_DIALOG,
+                  });
                 }}
               >
                 {appShortcut?.title}
@@ -187,6 +194,7 @@ export default function AppMenu() {
     getAppShortcuts,
     installedApps,
     appShortcuts,
+    dispatch,
   ]);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {

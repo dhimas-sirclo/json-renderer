@@ -1,2 +1,2 @@
 export * from "./blocks";
-export * from "./dialogs";
+export * from "./application/dialogs";
