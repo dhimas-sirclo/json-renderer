@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import {
   Avatar,
   Box,
@@ -16,37 +15,21 @@ import { BlocksBuilder } from "../../index";
 export default function AppDialog() {
   const { state, dispatch } = useAppDialogCtx();
 
-  const initialValues = (state?.data?.blocks ?? []).reduce(
-    (
-      obj: { [key: string]: any },
-      { type, input }: { type: string; input: { name: string; type: string } }
-    ) => {
-      if (type !== "input") {
-        return obj;
-      }
-      return {
-        ...obj,
-        [input.name]: input.type === "checkbox" ? [] : "",
-      };
-    },
-    {} as { [key: string]: any }
-  );
-
   const handleClose = () => {
     dispatch({
       type: CLOSE_APP_DIALOG,
     });
   };
 
-  const handleOnClick = (type: string, id?: string) => () => {
-    switch (type) {
-      case "cancel":
-        handleClose();
-        break;
-      default:
-        break;
-    }
-  };
+  // const handleClick = (type: string, id?: string) => () => {
+  //   switch (type) {
+  //     case "cancel":
+  //       handleClose();
+  //       break;
+  //     default:
+  //       break;
+  //   }
+  // };
 
   return (
     <Dialog
@@ -56,7 +39,24 @@ export default function AppDialog() {
       maxWidth="sm"
     >
       <Formik<{ [key: string]: any }>
-        initialValues={initialValues}
+        initialValues={(state?.data?.blocks ?? []).reduce(
+          (
+            obj: { [key: string]: any },
+            {
+              type,
+              input,
+            }: { type: string; input: { name: string; type: string } }
+          ) => {
+            if (type !== "input") {
+              return obj;
+            }
+            return {
+              ...obj,
+              [input.name]: input.type === "checkbox" ? [] : "",
+            };
+          },
+          {} as { [key: string]: any }
+        )}
         onSubmit={async (values) => {
           console.log(values);
         }}
@@ -78,7 +78,7 @@ export default function AppDialog() {
               </Box>
             </DialogTitle>
             <DialogContent>
-              {/* <BlocksBuilder data={state?.data?.blocks ?? []} /> */}
+              {/* <BlocksBuilder data={state?.data?.blocks} /> */}
             </DialogContent>
             <DialogActions>
               {(state?.data?.action?.buttons ?? []).map(
@@ -87,7 +87,7 @@ export default function AppDialog() {
                     <Button
                       key={i}
                       type={button.type === "cancel" ? "button" : button.type}
-                      // onClick={handleOnClick(button.type, button.action?.id)}
+                      // onClick={handleClick(button.type, button.action?.id)}
                       disabled={button.type === "submit" && isSubmitting}
                     >
                       {button.type === "submit" && isSubmitting

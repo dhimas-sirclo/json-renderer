@@ -1,6 +1,7 @@
 import { AppBar, Toolbar, Container, Typography, Paper } from "@mui/material";
 import Head from "next/head";
 import { AppDialog } from "./application/dialogs";
+import ClientOnly from "./ClientOnly";
 
 export default function Layout({ children }: any) {
   return (

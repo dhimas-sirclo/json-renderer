@@ -7,14 +7,18 @@ import TextField from "../inputs/TextField";
 import Button from "../button/Button";
 
 export interface BlocksBuilderProps {
-  data: { [key: string]: any }[];
+  data?: { [key: string]: any }[];
   direction?: "row" | "column";
 }
 
 export default function BlocksBuilder({
-  data,
+  data = [],
   direction = "column",
 }: BlocksBuilderProps) {
+  if (data.length == 0) {
+    return <></>;
+  }
+
   return (
     <Box
       display="flex"
