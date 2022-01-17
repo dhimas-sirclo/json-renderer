@@ -9,32 +9,32 @@ import {
   IconButton,
 } from "@mui/material";
 import { AttachFile, EmojiEmotions, Send } from "@mui/icons-material";
-import { useQuery } from "@apollo/client";
+// import { useQuery } from "@apollo/client";
 
-import { AppDialog } from "../components";
+// import { AppDialog } from "../components";
 import { AppMenu } from "../components/menu";
-import getAppBlocks from "../graphql/documents/applications/queries/getAppBlocks";
+// import getAppBlocks from "../graphql/documents/applications/queries/getAppBlocks";
 
 const Home: NextPage = () => {
   const [blocksData, setBlocksData] = useState();
 
-  const { data, loading } = useQuery(getAppBlocks, {
-    variables: {
-      filter: {
-        appId: "chat",
-        blocksId: "searchProductDialog",
-      },
-    },
-  });
+  // const { data, loading } = useQuery(getAppBlocks, {
+  //   variables: {
+  //     filter: {
+  //       appId: "chat",
+  //       blocksId: "searchProductDialog",
+  //     },
+  //   },
+  // });
 
-  useEffect(() => {
-    if (!data) return;
-    setBlocksData(data.applicationBlocks);
-  }, [data]);
+  // useEffect(() => {
+  //   if (!data) return;
+  //   setBlocksData(data.applicationBlocks);
+  // }, [data]);
 
-  if (loading || !blocksData) {
-    return <>Loading...</>;
-  }
+  // if (loading || !blocksData) {
+  //   return <>Loading...</>;
+  // }
 
   return (
     <>
@@ -48,7 +48,7 @@ const Home: NextPage = () => {
             </Typography>
           </Box>
           <Box sx={{ marginBottom: "20px" }}>
-            <AppDialog data={blocksData} />
+            {/* <AppDialog data={blocksData} /> */}
           </Box>
           <Box sx={{ marginBottom: "20px" }}>
             <TextField

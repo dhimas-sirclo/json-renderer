@@ -1,30 +1,25 @@
-type Test {
-  id: ID!
-}
-
 input InstalledApplicationsFilter {
-  tenantIds: [String!]
-  brandIds: [String!]
-  communicationChannels: [String!]
-  """
-  ACTIVE,
-  """
+  tenantIds: [ID!]
+  brandIds: [ID!]
+  roomIds: [ID!]
+  channels: [ID!]
   status: [String!]
 }
 
 input ApplicationShortcutsFilter {
   appId: ID!
-  """
-  ACTIVE,
-  """
+  tenantIds: [ID!]
+  brandIds: [ID!]
+  roomIds: [ID!]
+  channels: [ID!]
   status: [String!]
 }
 
 type ApplicationShortcut {
   id: ID!
   title: String!
-  shortcut: String!
   description: String!
+  actionId: ID!
 }
 
 type InstalledApplication {
@@ -34,7 +29,6 @@ type InstalledApplication {
 }
 
 extend type Query {
-  test: Test!
   applicationShortcuts(
     filter: ApplicationShortcutsFilter
   ): [ApplicationShortcut]
@@ -48,6 +42,7 @@ input ExecuteActionInput {
   tenantId: ID!
   brandId: ID!
   roomId: ID!
+  channel: ID!
   action: String!
   """
   JSON String
@@ -60,6 +55,7 @@ input ExecuteShortcutInput {
   tenantId: ID!
   brandId: ID!
   roomId: ID!
+  channel: ID!
   shortcut: String!
   """
   JSON String
@@ -72,6 +68,7 @@ input ExecuteSlashCommandInput {
   tenantId: ID!
   brandId: ID!
   roomId: ID!
+  channel: ID!
   command: String!
   """
   JSON String
@@ -119,7 +116,6 @@ type Title {
 }
 
 extend type Mutation {
-  test: Test!
   executeAction(input: ExecuteActionInput!): UntitledResponse
   executeShortcut(input: ExecuteShortcutInput!): UntitledResponse
   executeSlashCommand(input: ExecuteSlashCommandInput!): UntitledResponse

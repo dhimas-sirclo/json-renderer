@@ -17,16 +17,19 @@ export type Scalars = {
 
 export type ApplicationShortcut = {
   __typename?: 'ApplicationShortcut';
+  actionId: Scalars['ID'];
   description: Scalars['String'];
   id: Scalars['ID'];
-  shortcut: Scalars['String'];
   title: Scalars['String'];
 };
 
 export type ApplicationShortcutsFilter = {
   appId: Scalars['ID'];
-  /** ACTIVE, */
+  brandIds?: InputMaybe<Array<Scalars['ID']>>;
+  channels?: InputMaybe<Array<Scalars['ID']>>;
+  roomIds?: InputMaybe<Array<Scalars['ID']>>;
   status?: InputMaybe<Array<Scalars['String']>>;
+  tenantIds?: InputMaybe<Array<Scalars['ID']>>;
 };
 
 export type Block = {
@@ -53,6 +56,7 @@ export type ExecuteActionInput = {
   action: Scalars['String'];
   appId: Scalars['ID'];
   brandId: Scalars['ID'];
+  channel: Scalars['ID'];
   /** JSON String */
   data?: InputMaybe<Scalars['String']>;
   roomId: Scalars['ID'];
@@ -62,6 +66,7 @@ export type ExecuteActionInput = {
 export type ExecuteShortcutInput = {
   appId: Scalars['ID'];
   brandId: Scalars['ID'];
+  channel: Scalars['ID'];
   /** JSON String */
   data?: InputMaybe<Scalars['String']>;
   roomId: Scalars['ID'];
@@ -72,6 +77,7 @@ export type ExecuteShortcutInput = {
 export type ExecuteSlashCommandInput = {
   appId: Scalars['ID'];
   brandId: Scalars['ID'];
+  channel: Scalars['ID'];
   command: Scalars['String'];
   /** JSON String */
   data?: InputMaybe<Scalars['String']>;
@@ -87,11 +93,11 @@ export type InstalledApplication = {
 };
 
 export type InstalledApplicationsFilter = {
-  brandIds?: InputMaybe<Array<Scalars['String']>>;
-  communicationChannels?: InputMaybe<Array<Scalars['String']>>;
-  /** ACTIVE, */
+  brandIds?: InputMaybe<Array<Scalars['ID']>>;
+  channels?: InputMaybe<Array<Scalars['ID']>>;
+  roomIds?: InputMaybe<Array<Scalars['ID']>>;
   status?: InputMaybe<Array<Scalars['String']>>;
-  tenantIds?: InputMaybe<Array<Scalars['String']>>;
+  tenantIds?: InputMaybe<Array<Scalars['ID']>>;
 };
 
 export type Mutation = {
@@ -99,7 +105,6 @@ export type Mutation = {
   executeAction?: Maybe<UntitledResponse>;
   executeShortcut?: Maybe<UntitledResponse>;
   executeSlashCommand?: Maybe<UntitledResponse>;
-  test: Test;
 };
 
 
@@ -121,7 +126,6 @@ export type Query = {
   __typename?: 'Query';
   applicationShortcuts?: Maybe<Array<Maybe<ApplicationShortcut>>>;
   installedApplications?: Maybe<Array<Maybe<InstalledApplication>>>;
-  test: Test;
 };
 
 
@@ -134,11 +138,6 @@ export type QueryInstalledApplicationsArgs = {
   filter?: InputMaybe<InstalledApplicationsFilter>;
 };
 
-export type Test = {
-  __typename?: 'Test';
-  id: Scalars['ID'];
-};
-
 export type Title = {
   __typename?: 'Title';
   icon?: Maybe<Scalars['String']>;
@@ -147,8 +146,8 @@ export type Title = {
 
 export type UntitledAction = {
   __typename?: 'UntitledAction';
-  buttons?: Maybe<Array<UntitledButton>>;
-  id: Scalars['ID'];
+  buttons: Array<UntitledButton>;
+  id?: Maybe<Scalars['ID']>;
 };
 
 export type UntitledButton = {
@@ -165,217 +164,28 @@ export type UntitledResponse = {
   type: Scalars['String'];
 };
 
-export type ExecuteActionMutationVariables = Exact<{
-  input: ExecuteActionInput;
-}>;
-
-
-export type ExecuteActionMutation = { __typename?: 'Mutation', executeAction?: { __typename?: 'UntitledResponse', type: string, title?: { __typename?: 'Title', text?: string | null | undefined, icon?: string | null | undefined } | null | undefined, action?: { __typename?: 'UntitledAction', id: string, buttons?: Array<{ __typename?: 'UntitledButton', type?: string | null | undefined, label: string }> | null | undefined } | null | undefined, blocks?: Array<{ __typename?: 'Block', type: string, input?: { __typename?: 'BlockInput', type: string, name: string, label?: string | null | undefined, options?: Array<{ __typename?: 'BlockInputOption', label: string, value: string }> | null | undefined } | null | undefined }> | null | undefined } | null | undefined };
-
-export type ExecuteShortcutMutationVariables = Exact<{
-  input: ExecuteShortcutInput;
-}>;
-
-
-export type ExecuteShortcutMutation = { __typename?: 'Mutation', executeShortcut?: { __typename?: 'UntitledResponse', type: string, title?: { __typename?: 'Title', text?: string | null | undefined, icon?: string | null | undefined } | null | undefined, action?: { __typename?: 'UntitledAction', id: string, buttons?: Array<{ __typename?: 'UntitledButton', type?: string | null | undefined, label: string }> | null | undefined } | null | undefined, blocks?: Array<{ __typename?: 'Block', type: string, input?: { __typename?: 'BlockInput', type: string, name: string, label?: string | null | undefined, options?: Array<{ __typename?: 'BlockInputOption', label: string, value: string }> | null | undefined } | null | undefined }> | null | undefined } | null | undefined };
-
-export type ExecuteSlashCommandMutationVariables = Exact<{
-  input: ExecuteSlashCommandInput;
-}>;
-
-
-export type ExecuteSlashCommandMutation = { __typename?: 'Mutation', executeSlashCommand?: { __typename?: 'UntitledResponse', type: string, title?: { __typename?: 'Title', text?: string | null | undefined, icon?: string | null | undefined } | null | undefined, action?: { __typename?: 'UntitledAction', id: string, buttons?: Array<{ __typename?: 'UntitledButton', type?: string | null | undefined, label: string }> | null | undefined } | null | undefined, blocks?: Array<{ __typename?: 'Block', type: string, input?: { __typename?: 'BlockInput', type: string, name: string, label?: string | null | undefined, options?: Array<{ __typename?: 'BlockInputOption', label: string, value: string }> | null | undefined } | null | undefined }> | null | undefined } | null | undefined };
-
 export type GetAppShortcutsQueryVariables = Exact<{
   filter: ApplicationShortcutsFilter;
 }>;
 
 
-export type GetAppShortcutsQuery = { __typename?: 'Query', applicationShortcuts?: Array<{ __typename?: 'ApplicationShortcut', id: string, title: string, shortcut: string, description: string } | null | undefined> | null | undefined };
+export type GetAppShortcutsQuery = { __typename?: 'Query', applicationShortcuts?: Array<{ __typename?: 'ApplicationShortcut', id: string, title: string, description: string, actionId: string } | null | undefined> | null | undefined };
 
 export type GetInstalledAppsQueryVariables = Exact<{
-  filter: InstalledApplicationsFilter;
+  filter?: InputMaybe<InstalledApplicationsFilter>;
 }>;
 
 
 export type GetInstalledAppsQuery = { __typename?: 'Query', installedApplications?: Array<{ __typename?: 'InstalledApplication', id: string, title: string, description: string } | null | undefined> | null | undefined };
 
 
-export const ExecuteActionDocument = gql`
-    mutation executeAction($input: ExecuteActionInput!) {
-  executeAction(input: $input) {
-    type @client
-    title {
-      text @client
-      icon @client
-    }
-    action {
-      id @client
-      buttons {
-        type @client
-        label @client
-      }
-    }
-    blocks {
-      type @client
-      input {
-        type @client
-        name @client
-        label @client
-        options {
-          label @client
-          value @client
-        }
-      }
-    }
-  }
-}
-    `;
-export type ExecuteActionMutationFn = Apollo.MutationFunction<ExecuteActionMutation, ExecuteActionMutationVariables>;
-
-/**
- * __useExecuteActionMutation__
- *
- * To run a mutation, you first call `useExecuteActionMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useExecuteActionMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [executeActionMutation, { data, loading, error }] = useExecuteActionMutation({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useExecuteActionMutation(baseOptions?: Apollo.MutationHookOptions<ExecuteActionMutation, ExecuteActionMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<ExecuteActionMutation, ExecuteActionMutationVariables>(ExecuteActionDocument, options);
-      }
-export type ExecuteActionMutationHookResult = ReturnType<typeof useExecuteActionMutation>;
-export type ExecuteActionMutationResult = Apollo.MutationResult<ExecuteActionMutation>;
-export type ExecuteActionMutationOptions = Apollo.BaseMutationOptions<ExecuteActionMutation, ExecuteActionMutationVariables>;
-export const ExecuteShortcutDocument = gql`
-    mutation executeShortcut($input: ExecuteShortcutInput!) {
-  executeShortcut(input: $input) {
-    type @client
-    title {
-      text @client
-      icon @client
-    }
-    action {
-      id @client
-      buttons {
-        type @client
-        label @client
-      }
-    }
-    blocks {
-      type @client
-      input {
-        type @client
-        name @client
-        label @client
-        options {
-          label @client
-          value @client
-        }
-      }
-    }
-  }
-}
-    `;
-export type ExecuteShortcutMutationFn = Apollo.MutationFunction<ExecuteShortcutMutation, ExecuteShortcutMutationVariables>;
-
-/**
- * __useExecuteShortcutMutation__
- *
- * To run a mutation, you first call `useExecuteShortcutMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useExecuteShortcutMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [executeShortcutMutation, { data, loading, error }] = useExecuteShortcutMutation({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useExecuteShortcutMutation(baseOptions?: Apollo.MutationHookOptions<ExecuteShortcutMutation, ExecuteShortcutMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<ExecuteShortcutMutation, ExecuteShortcutMutationVariables>(ExecuteShortcutDocument, options);
-      }
-export type ExecuteShortcutMutationHookResult = ReturnType<typeof useExecuteShortcutMutation>;
-export type ExecuteShortcutMutationResult = Apollo.MutationResult<ExecuteShortcutMutation>;
-export type ExecuteShortcutMutationOptions = Apollo.BaseMutationOptions<ExecuteShortcutMutation, ExecuteShortcutMutationVariables>;
-export const ExecuteSlashCommandDocument = gql`
-    mutation executeSlashCommand($input: ExecuteSlashCommandInput!) {
-  executeSlashCommand(input: $input) {
-    type @client
-    title {
-      text @client
-      icon @client
-    }
-    action {
-      id @client
-      buttons {
-        type @client
-        label @client
-      }
-    }
-    blocks {
-      type @client
-      input {
-        type @client
-        name @client
-        label @client
-        options {
-          label @client
-          value @client
-        }
-      }
-    }
-  }
-}
-    `;
-export type ExecuteSlashCommandMutationFn = Apollo.MutationFunction<ExecuteSlashCommandMutation, ExecuteSlashCommandMutationVariables>;
-
-/**
- * __useExecuteSlashCommandMutation__
- *
- * To run a mutation, you first call `useExecuteSlashCommandMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useExecuteSlashCommandMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [executeSlashCommandMutation, { data, loading, error }] = useExecuteSlashCommandMutation({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useExecuteSlashCommandMutation(baseOptions?: Apollo.MutationHookOptions<ExecuteSlashCommandMutation, ExecuteSlashCommandMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<ExecuteSlashCommandMutation, ExecuteSlashCommandMutationVariables>(ExecuteSlashCommandDocument, options);
-      }
-export type ExecuteSlashCommandMutationHookResult = ReturnType<typeof useExecuteSlashCommandMutation>;
-export type ExecuteSlashCommandMutationResult = Apollo.MutationResult<ExecuteSlashCommandMutation>;
-export type ExecuteSlashCommandMutationOptions = Apollo.BaseMutationOptions<ExecuteSlashCommandMutation, ExecuteSlashCommandMutationVariables>;
 export const GetAppShortcutsDocument = gql`
     query getAppShortcuts($filter: ApplicationShortcutsFilter!) {
   applicationShortcuts(filter: $filter) {
-    id @client
-    title @client
-    shortcut @client
-    description @client
+    id
+    title
+    description
+    actionId
   }
 }
     `;
@@ -408,11 +218,11 @@ export type GetAppShortcutsQueryHookResult = ReturnType<typeof useGetAppShortcut
 export type GetAppShortcutsLazyQueryHookResult = ReturnType<typeof useGetAppShortcutsLazyQuery>;
 export type GetAppShortcutsQueryResult = Apollo.QueryResult<GetAppShortcutsQuery, GetAppShortcutsQueryVariables>;
 export const GetInstalledAppsDocument = gql`
-    query getInstalledApps($filter: InstalledApplicationsFilter!) {
+    query getInstalledApps($filter: InstalledApplicationsFilter) {
   installedApplications(filter: $filter) {
-    id @client
-    title @client
-    description @client
+    id
+    title
+    description
   }
 }
     `;
@@ -433,7 +243,7 @@ export const GetInstalledAppsDocument = gql`
  *   },
  * });
  */
-export function useGetInstalledAppsQuery(baseOptions: Apollo.QueryHookOptions<GetInstalledAppsQuery, GetInstalledAppsQueryVariables>) {
+export function useGetInstalledAppsQuery(baseOptions?: Apollo.QueryHookOptions<GetInstalledAppsQuery, GetInstalledAppsQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<GetInstalledAppsQuery, GetInstalledAppsQueryVariables>(GetInstalledAppsDocument, options);
       }

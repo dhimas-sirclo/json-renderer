@@ -1,34 +1,34 @@
 import { gql } from "@apollo/client";
 
-const executeSlashCommand = gql`
-  mutation executeSlashCommand($input: ExecuteSlashCommandInput!) {
-    executeSlashCommand(input: $input) {
-      type @client
-      title {
-        text @client
-        icon @client
-      }
-      action {
-        id @client
-        buttons {
-          type @client
-          label @client
-        }
-      }
-      blocks {
-        type @client
-        input {
-          type @client
-          name @client
-          label @client
-          options {
-            label @client
-            value @client
-          }
-        }
-      }
-    }
-  }
-`;
+// const executeSlashCommand = gql`
+//   mutation executeSlashCommand($input: ExecuteSlashCommandInput!) {
+//     executeSlashCommand(input: $input) {
+//       type
+//       title {
+//         text
+//         icon
+//       }
+//       action {
+//         id
+//         buttons {
+//           type
+//           label
+//         }
+//       }
+//       blocks {
+//         type
+//         input {
+//           type
+//           name
+//           label
+//           options {
+//             label
+//             value
+//           }
+//         }
+//       }
+//     }
+//   }
+// `;
 
-export default executeSlashCommand;
+// export default executeSlashCommand;

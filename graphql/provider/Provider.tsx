@@ -1,8 +1,6 @@
 import React from "react";
 import { MockedProvider } from "@apollo/client/testing";
-import { ApolloProvider } from "@apollo/client";
-import queries from "../../mocks/queries";
-import mutations from "../../mocks/mutations";
+import mocks from "../../mocks";
 
 interface ProviderProps {
   children: JSX.Element;
@@ -10,7 +8,7 @@ interface ProviderProps {
 
 export default function Provider({ children }: ProviderProps) {
   return (
-    <MockedProvider mocks={[...queries, ...mutations]}>
+    <MockedProvider addTypename={false} mocks={mocks}>
       <>{children}</>
     </MockedProvider>
   );

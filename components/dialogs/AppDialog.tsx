@@ -6,11 +6,10 @@ import {
   DialogContent,
   DialogTitle,
 } from "@mui/material";
-import { useMutation } from "@apollo/client";
-import { Formik, Form, Field } from "formik";
+import { Formik, Form } from "formik";
 
 import { BlocksBuilder } from "..";
-import executeAction from "../../graphql/documents/applications/mutations/executeAction";
+// import executeAction from "../../graphql/documents/applications/mutations/executeAction";
 
 const emails = ["username@gmail.com", "user02@gmail.com"];
 
@@ -27,11 +26,11 @@ interface Values {
 function AppDialog({ data, onClose, open }: AppDialogProps) {
   const [dialogData, setDialogData] = useState(data);
 
-  const [action] = useMutation(executeAction, {
-    onCompleted(data) {
-      setDialogData(data.executeAction);
-    },
-  });
+  // const [action] = useMutation(executeAction, {
+  //   onCompleted(data) {
+  //     setDialogData(data.executeAction);
+  //   },
+  // });
 
   const initialValues = data.blocks.reduce(
     (
@@ -55,17 +54,17 @@ function AppDialog({ data, onClose, open }: AppDialogProps) {
         onClose();
         break;
       case "button":
-        action({
-          variables: {
-            input: {
-              appId: "chat",
-              tenantId: "chat",
-              brandId: "chat",
-              roomId: "chat",
-              action: id,
-            },
-          },
-        });
+        // action({
+        //   variables: {
+        //     input: {
+        //       appId: "chat",
+        //       tenantId: "chat",
+        //       brandId: "chat",
+        //       roomId: "chat",
+        //       action: id,
+        //     },
+        //   },
+        // });
         break;
       default:
         break;
@@ -77,18 +76,18 @@ function AppDialog({ data, onClose, open }: AppDialogProps) {
       <Formik<Values>
         initialValues={initialValues}
         onSubmit={async (values) => {
-          action({
-            variables: {
-              input: {
-                appId: "chat",
-                tenantId: "chat",
-                brandId: "chat",
-                roomId: "chat",
-                action: dialogData.action.id,
-                data: JSON.stringify(values),
-              },
-            },
-          });
+          // action({
+          //   variables: {
+          //     input: {
+          //       appId: "chat",
+          //       tenantId: "chat",
+          //       brandId: "chat",
+          //       roomId: "chat",
+          //       action: dialogData.action.id,
+          //       data: JSON.stringify(values),
+          //     },
+          //   },
+          // });
         }}
       >
         {({ isSubmitting }) => (

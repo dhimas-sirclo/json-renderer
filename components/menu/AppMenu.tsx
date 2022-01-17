@@ -1,21 +1,201 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { IconButton } from "@mui/material";
 import { MoreVert } from "@mui/icons-material";
+import {
+  ApplicationShortcut,
+  InstalledApplication,
+  useGetAppShortcutsLazyQuery,
+  useGetInstalledAppsLazyQuery,
+} from "../../graphql";
+
+const defaultMenuItems = [
+  <MenuItem key="not-found" disabled>
+    Not Found
+  </MenuItem>,
+];
 
 export default function AppMenu() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+
+  const [menuItems, setMenuItems] = useState<JSX.Element[]>(defaultMenuItems);
+
+  const [selectedApp, setSelectedApp] = useState<
+    InstalledApplication | null | undefined
+  >();
+  // TODO: remove it in real implementation. For POC only.
+  const [installedApps, setInstalledApps] = useState<InstalledApplication[]>(
+    []
+  );
+  const [appShortcuts, setAppShortcuts] = useState<ApplicationShortcut[]>([]);
+
+  const [getInstalledApps, { data: getInstalledAppsData, refetch }] =
+    useGetInstalledAppsLazyQuery({
+      variables: {
+        filter: {
+          brandIds: ["chat"],
+          channels: ["channel"],
+          roomIds: ["room"],
+          tenantIds: ["chat"],
+        },
+      },
+    });
+
+  useEffect(() => {
+    const installedAppsTemp = (
+      getInstalledAppsData?.installedApplications ?? []
+    ).reduce((result, app) => {
+      if (!app) return result;
+      return result.concat({
+        id: app.id,
+        title: app.title,
+        description: app.description,
+      });
+    }, [] as InstalledApplication[]);
+    setInstalledApps(installedAppsTemp);
+    setMenuItems(
+      installedAppsTemp.map((app) => (
+        <MenuItem
+          key={app.id}
+          onClick={() => {
+            setMenuItems([
+              <MenuItem
+                key={app.id}
+                onClick={() => {
+                  setSelectedApp(null);
+                }}
+              >
+                {`< ${app.title}`}
+              </MenuItem>,
+            ]);
+            setSelectedApp(app);
+          }}
+        >
+          {app.title}
+        </MenuItem>
+      ))
+    );
+  }, [getInstalledAppsData]);
+
+  const [getAppShortcuts, { data: getAppShortcutsData }] =
+    useGetAppShortcutsLazyQuery();
+
+  useEffect(() => {
+    const appShortcutsTemp = (
+      getAppShortcutsData?.applicationShortcuts ?? []
+    ).reduce((result, shortcut) => {
+      if (!shortcut) return result;
+      return result.concat({
+        id: shortcut.id,
+        actionId: shortcut.actionId,
+        description: shortcut.description,
+        title: shortcut.title,
+      });
+    }, [] as ApplicationShortcut[]);
+    setAppShortcuts(appShortcutsTemp);
+    setMenuItems((prev) => {
+      return prev.concat(
+        appShortcutsTemp.map((appShortcut) => {
+          return (
+            <MenuItem
+              key={appShortcut?.id}
+              onClick={() => {
+                console.log(appShortcut);
+              }}
+            >
+              {appShortcut?.title}
+            </MenuItem>
+          );
+        })
+      );
+    });
+  }, [getAppShortcutsData]);
+
+  useEffect(() => {
+    if (!selectedApp) {
+      if (installedApps.length > 0) {
+        setMenuItems(
+          installedApps.map((app) => (
+            <MenuItem
+              key={app.id}
+              onClick={() => {
+                setMenuItems([
+                  <MenuItem
+                    key={app.id}
+                    onClick={() => {
+                      setSelectedApp(null);
+                    }}
+                  >
+                    {`< ${app.title}`}
+                  </MenuItem>,
+                ]);
+                setSelectedApp(app);
+              }}
+            >
+              {app.title}
+            </MenuItem>
+          ))
+        );
+      }
+      return;
+    }
+    // TODO: remove it on real implementation. For POC only.
+    if (appShortcuts.length > 0) {
+      setMenuItems(
+        [
+          <MenuItem
+            key={selectedApp.id}
+            onClick={() => {
+              setSelectedApp(null);
+            }}
+          >
+            {`< ${selectedApp.title}`}
+          </MenuItem>,
+        ].concat(
+          appShortcuts.map((appShortcut) => {
+            return (
+              <MenuItem
+                key={appShortcut?.id}
+                onClick={() => {
+                  console.log(appShortcut);
+                }}
+              >
+                {appShortcut?.title}
+              </MenuItem>
+            );
+          })
+        )
+      );
+      return;
+    }
+    getAppShortcuts({
+      variables: {
+        filter: {
+          appId: selectedApp.id,
+          brandIds: ["chat"],
+          channels: ["channel"],
+          roomIds: ["room"],
+          tenantIds: ["chat"],
+        },
+      },
+    });
+  }, [
+    selectedApp,
+    getInstalledApps,
+    getAppShortcuts,
+    installedApps,
+    appShortcuts,
+  ]);
+
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    getInstalledApps();
     setAnchorEl(event.currentTarget);
   };
+
   const handleClose = () => {
     setAnchorEl(null);
-  };
-
-  const handleShortcutClick = () => {
-    // TODO: call app mutation
   };
 
   return (
@@ -46,7 +226,7 @@ export default function AppMenu() {
           horizontal: "left",
         }}
       >
-        <MenuItem onClick={handleShortcutClick}>SIRCLO Store</MenuItem>
+        {menuItems}
       </Menu>
     </div>
   );
