@@ -11,11 +11,14 @@ export interface BlocksBuilderProps {
   direction?: "row" | "column";
 }
 
-export default function BlocksBuilder({ data, direction }: BlocksBuilderProps) {
+export default function BlocksBuilder({
+  data,
+  direction = "column",
+}: BlocksBuilderProps) {
   return (
     <Box
       display="flex"
-      flexDirection={direction ? direction : "column"}
+      flexDirection={direction}
       alignItems="center"
       width="100%"
     >

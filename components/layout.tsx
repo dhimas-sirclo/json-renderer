@@ -1,6 +1,6 @@
 import { AppBar, Toolbar, Container, Typography, Paper } from "@mui/material";
 import Head from "next/head";
-import { AppDialog } from "../components/application/dialogs";
+import { AppDialog } from "./application/dialogs";
 
 export default function Layout({ children }: any) {
   return (
@@ -8,9 +8,6 @@ export default function Layout({ children }: any) {
       <Head>
         <meta name="viewport" content="initial-scale=1, width=device-width" />
       </Head>
-
-      <AppDialog />
-
       <AppBar position="fixed">
         <Toolbar>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
@@ -24,6 +21,7 @@ export default function Layout({ children }: any) {
           <main>{children}</main>
         </Container>
       </Paper>
+      <AppDialog />
     </>
   );
 }

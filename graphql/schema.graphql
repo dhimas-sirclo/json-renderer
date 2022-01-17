@@ -50,40 +50,19 @@ input ExecuteActionInput {
   data: String
 }
 
-input ExecuteShortcutInput {
-  appId: ID!
-  tenantId: ID!
-  brandId: ID!
-  roomId: ID!
-  channel: ID!
-  shortcut: String!
-  """
-  JSON String
-  """
-  data: String
-}
-
-input ExecuteSlashCommandInput {
-  appId: ID!
-  tenantId: ID!
-  brandId: ID!
-  roomId: ID!
-  channel: ID!
-  command: String!
-  """
-  JSON String
-  """
-  data: String
+type UntitledButtonAction {
+  id: String!
 }
 
 type UntitledButton {
   type: String
   label: String!
+  action: UntitledButtonAction
 }
 
 type UntitledAction {
   id: ID
-  buttons: [UntitledButton!]!
+  buttons: [UntitledButton]
 }
 
 type BlockInputOption {
@@ -117,6 +96,4 @@ type Title {
 
 extend type Mutation {
   executeAction(input: ExecuteActionInput!): UntitledResponse
-  executeShortcut(input: ExecuteShortcutInput!): UntitledResponse
-  executeSlashCommand(input: ExecuteSlashCommandInput!): UntitledResponse
 }

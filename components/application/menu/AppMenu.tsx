@@ -6,6 +6,7 @@ import { MoreVert } from "@mui/icons-material";
 import {
   ApplicationShortcut,
   InstalledApplication,
+  useExecuteActionMutation,
   useGetAppShortcutsLazyQuery,
   useGetInstalledAppsLazyQuery,
 } from "../../../graphql";
@@ -85,6 +86,18 @@ export default function AppMenu() {
   const [getAppShortcuts, { data: getAppShortcutsData }] =
     useGetAppShortcutsLazyQuery();
 
+  const [executeAction] = useExecuteActionMutation({
+    onCompleted: (data) => {
+      console.log(data);
+      dispatch({
+        type: OPEN_APP_DIALOG,
+        payload: {
+          data: data.executeAction ?? undefined,
+        },
+      });
+    },
+  });
+
   useEffect(() => {
     const appShortcutsTemp = (
       getAppShortcutsData?.applicationShortcuts ?? []
@@ -105,8 +118,17 @@ export default function AppMenu() {
             <MenuItem
               key={appShortcut?.id}
               onClick={() => {
-                dispatch({
-                  type: OPEN_APP_DIALOG,
+                executeAction({
+                  variables: {
+                    input: {
+                      action: appShortcut.actionId,
+                      appId: selectedApp?.id ?? "",
+                      brandId: "chat",
+                      channel: "channel",
+                      roomId: "room",
+                      tenantId: "chat",
+                    },
+                  },
                 });
               }}
             >
@@ -116,7 +138,7 @@ export default function AppMenu() {
         })
       );
     });
-  }, [getAppShortcutsData, dispatch]);
+  }, [getAppShortcutsData, dispatch, executeAction, selectedApp]);
 
   useEffect(() => {
     if (!selectedApp) {
@@ -164,8 +186,17 @@ export default function AppMenu() {
               <MenuItem
                 key={appShortcut?.id}
                 onClick={() => {
-                  dispatch({
-                    type: OPEN_APP_DIALOG,
+                  executeAction({
+                    variables: {
+                      input: {
+                        action: appShortcut.actionId,
+                        appId: selectedApp?.id ?? "",
+                        brandId: "chat",
+                        channel: "channel",
+                        roomId: "room",
+                        tenantId: "chat",
+                      },
+                    },
                   });
                 }}
               >
@@ -195,6 +226,7 @@ export default function AppMenu() {
     installedApps,
     appShortcuts,
     dispatch,
+    executeAction,
   ]);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {

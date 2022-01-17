@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import {
+  Avatar,
+  Box,
   Button,
   Dialog,
   DialogActions,
@@ -10,38 +12,11 @@ import { Formik, Form } from "formik";
 
 import { useAppDialogCtx, CLOSE_APP_DIALOG } from "./AppDialogCtx";
 import { BlocksBuilder } from "../../index";
-// import executeAction from "../../graphql/documents/applications/mutations/executeAction";
-
-// const emails = ["username@gmail.com", "user02@gmail.com"];
-
-// export interface AppDialogProps {
-//   data: { [key: string]: any };
-//   open: boolean;
-//   onClose: () => void;
-// }
-
-// interface iData {
-//   [key: string]: any;
-// }
 
 export default function AppDialog() {
-  const {
-    state: { open = false, data = {} },
-    dispatch,
-  } = useAppDialogCtx();
+  const { state, dispatch } = useAppDialogCtx();
 
-  // const [initialValues, setInitialValues] = useState<{ [key: string]: any }>(
-  //   {}
-  // );
-  // const [dialogData, setDialogData] = useState(data);
-
-  // const [action] = useMutation(executeAction, {
-  //   onCompleted(data) {
-  //     setDialogData(data.executeAction);
-  //   },
-  // });
-
-  const initialValues = (data.blocks ?? []).reduce(
+  const initialValues = (state?.data?.blocks ?? []).reduce(
     (
       obj: { [key: string]: any },
       { type, input }: { type: string; input: { name: string; type: string } }
@@ -68,62 +43,51 @@ export default function AppDialog() {
       case "cancel":
         handleClose();
         break;
-      case "button":
-        // action({
-        //   variables: {
-        //     input: {
-        //       appId: "chat",
-        //       tenantId: "chat",
-        //       brandId: "chat",
-        //       roomId: "chat",
-        //       action: id,
-        //     },
-        //   },
-        // });
-        break;
       default:
         break;
     }
   };
 
   return (
-    <Dialog onClose={handleClose} open={open} fullWidth maxWidth="sm">
+    <Dialog
+      onClose={handleClose}
+      open={state.open ?? false}
+      fullWidth
+      maxWidth="sm"
+    >
       <Formik<{ [key: string]: any }>
         initialValues={initialValues}
         onSubmit={async (values) => {
-          // action({
-          //   variables: {
-          //     input: {
-          //       appId: "chat",
-          //       tenantId: "chat",
-          //       brandId: "chat",
-          //       roomId: "chat",
-          //       action: dialogData.action.id,
-          //       data: JSON.stringify(values),
-          //     },
-          //   },
-          // });
+          console.log(values);
         }}
       >
         {({ isSubmitting }) => (
           <Form>
             <DialogTitle>
-              Test
-              {/* {dialogData.title.text} */}
+              <Box
+                display="flex"
+                flexDirection="row"
+                alignItems="center"
+                justifyItems="center"
+              >
+                <Avatar
+                  src={state?.data?.title?.icon}
+                  alt={state?.data?.title?.text}
+                />
+                {state?.data?.title?.text}
+              </Box>
             </DialogTitle>
             <DialogContent>
-              Test
-              {/* <BlocksBuilder data={dialogData.blocks} /> */}
+              {/* <BlocksBuilder data={state?.data?.blocks ?? []} /> */}
             </DialogContent>
             <DialogActions>
-              Test
-              {/* {dialogData.action.buttons.map(
+              {(state?.data?.action?.buttons ?? []).map(
                 (button: { [key: string]: any }, i: number) => {
                   return (
                     <Button
                       key={i}
                       type={button.type === "cancel" ? "button" : button.type}
-                      onClick={handleOnClick(button.type, button.action?.id)}
+                      // onClick={handleOnClick(button.type, button.action?.id)}
                       disabled={button.type === "submit" && isSubmitting}
                     >
                       {button.type === "submit" && isSubmitting
@@ -132,7 +96,7 @@ export default function AppDialog() {
                     </Button>
                   );
                 }
-              )} */}
+              )}
             </DialogActions>
           </Form>
         )}
@@ -140,28 +104,3 @@ export default function AppDialog() {
     </Dialog>
   );
 }
-
-// export interface DialogButtonProps {
-//   data: { [key: string]: any };
-// }
-
-// export default function DialogButton({ data }: DialogButtonProps) {
-//   const [open, setOpen] = useState(false);
-
-//   const handleClick = () => {
-//     setOpen((prev) => !prev);
-//   };
-
-//   const handleClose = () => {
-//     setOpen(false);
-//   };
-
-//   return (
-//     <div>
-//       <Button color="primary" variant="contained" onClick={handleClick}>
-//         Open App Dialog
-//       </Button>
-//       <AppDialog data={data} open={open} onClose={handleClose} />
-//     </div>
-//   );
-// }
