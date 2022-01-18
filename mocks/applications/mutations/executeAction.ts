@@ -473,7 +473,7 @@ const viewCart: MockedResponse = {
                 type: "input",
                 input: {
                   type: "number",
-                  name: "qty",
+                  name: "jacket-black-m",
                   label: "Quantity",
                   value: "1",
                 },
@@ -618,7 +618,7 @@ const setShippingAddress: MockedResponse = {
         appId: "sirclo-store-v2",
         brandId: "chat",
         channel: "channel",
-        data: `{\"districtCode\":\"ID-JK0101\",\"name\":\"John Doe\",\"email\":\"john.doe@example.com\",\"phoneNumber\":\"081234567890\",\"postcode\":\"15345\",\"address\":\"GOP1\",\"latLong\":\"0.0,0.0\"}`,
+        data: `{\"name\":\"John Doe\",\"email\":\"john.doe@example.com\",\"phoneNumber\":\"081234567890\",\"districtCode\":\"ID-JK0101\",\"postcode\":\"15345\",\"address\":\"GOP1\",\"latLong\":\"0.0,0.0\"}`,
         roomId: "room",
         tenantId: "chat",
       },
