@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import {
   Avatar,
   Box,
@@ -31,6 +32,36 @@ export default function AppDialog() {
       });
     },
   });
+
+  const [initialValues, setInitialValues] = useState<{ [key: string]: any }>(
+    {}
+  );
+
+  useEffect(() => {
+    // reset
+    setInitialValues({});
+
+    const blocksTemp = state?.data?.blocks ?? [];
+    alert(JSON.stringify(blocksTemp, null, 2));
+
+    // set
+    const initialValuesTemp = (state?.data?.blocks ?? []).reduce(
+      (
+        obj: { [key: string]: any },
+        { type, input }: { type: string; input: { name: string; type: string } }
+      ) => {
+        if (type !== "input") {
+          return obj;
+        }
+        return {
+          ...obj,
+          [input.name]: input.type === "checkbox" ? [] : "",
+        };
+      },
+      {} as { [key: string]: any }
+    );
+    setInitialValues(initialValuesTemp);
+  }, [state]);
 
   const handleClose = () => {
     dispatch({
@@ -71,30 +102,14 @@ export default function AppDialog() {
       maxWidth="sm"
     >
       <Formik<{ [key: string]: any }>
-        initialValues={(state?.data?.blocks ?? []).reduce(
-          (
-            obj: { [key: string]: any },
-            {
-              type,
-              input,
-            }: { type: string; input: { name: string; type: string } }
-          ) => {
-            if (type !== "input") {
-              return obj;
-            }
-            return {
-              ...obj,
-              [input.name]: input.type === "checkbox" ? [] : "",
-            };
-          },
-          {} as { [key: string]: any }
-        )}
+        initialValues={initialValues}
+        enableReinitialize
         onSubmit={async (values) => {
           console.log(values);
           executeAction({
             variables: {
               input: {
-                action: "searchProduct",
+                action: state?.data?.action?.id ?? "",
                 appId: "sirclo-store-v2",
                 brandId: "chat",
                 channel: "channel",

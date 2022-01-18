@@ -32,14 +32,14 @@ export default function BlocksBuilder({
           case "input":
             switch (input.type) {
               case "text":
-                children = <TextField fullWidth key={key} name={input.name} />;
+                children = <TextField fullWidth key={key} {...input} />;
                 break;
               case "number":
                 children = (
                   <TextField
                     key={key}
-                    name={input.name}
-                    sx={{ width: 70, height: 40 }}
+                    {...input}
+                    // sx={{ width: 70, height: 40 }}
                     type="number"
                     InputProps={{
                       inputProps: {
@@ -51,43 +51,24 @@ export default function BlocksBuilder({
                 break;
               case "password":
                 children = (
-                  <TextField
-                    fullWidth
-                    key={key}
-                    name={input.name}
-                    type="password"
-                  />
+                  <TextField fullWidth key={key} {...input} type="password" />
                 );
                 break;
               case "textarea":
                 children = (
-                  <TextField multiline key={key} name={input.name} fullWidth />
+                  <TextField multiline key={key} fullWidth {...input} />
                 );
                 break;
               case "select":
                 children = children = (
-                  <TextField
-                    select
-                    key={key}
-                    name={input.name}
-                    fullWidth
-                    options={input.options}
-                  />
+                  <TextField select key={key} fullWidth {...input} />
                 );
                 break;
               case "checkbox":
-                children = (
-                  <CheckBox
-                    key={key}
-                    name={input.name}
-                    options={input.options}
-                  />
-                );
+                children = <CheckBox key={key} {...input} />;
                 break;
               case "radio":
-                children = (
-                  <Radio key={key} name={input.name} options={input.options} />
-                );
+                children = <Radio key={key} {...input} />;
                 break;
               default:
                 children = <></>;
