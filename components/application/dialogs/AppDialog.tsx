@@ -109,7 +109,7 @@ export default function AppDialog() {
       <Formik<{ [key: string]: any }>
         initialValues={initialValues}
         enableReinitialize
-        onSubmit={async (values) => {
+        onSubmit={async (values, actions) => {
           const variables = {
             input: {
               action: state?.data?.action?.id ?? "",
@@ -125,6 +125,7 @@ export default function AppDialog() {
           executeAction({
             variables,
           });
+          actions.resetForm();
         }}
       >
         {({ isSubmitting, values }) => {
