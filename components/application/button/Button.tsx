@@ -19,7 +19,7 @@ export default function Button({
   const { dispatch } = useAppDialogCtx();
   const [executeAction] = useExecuteActionMutation({
     onCompleted: (data) => {
-      console.log(data);
+      console.log("data", data);
       dispatch({
         type: OPEN_APP_DIALOG,
         payload: {
@@ -31,17 +31,19 @@ export default function Button({
 
   const handleAction = () => {
     if (!action) return;
-    executeAction({
-      variables: {
-        input: {
-          appId: "sirclo-store-v2",
-          tenantId: "chat",
-          brandId: "chat",
-          roomId: "room",
-          channel: "channel",
-          action: action.id,
-        },
+    const variables = {
+      input: {
+        appId: "sirclo-store-v2",
+        tenantId: "chat",
+        brandId: "chat",
+        roomId: "room",
+        channel: "channel",
+        action: action.id,
       },
+    };
+    console.log("variables", variables);
+    executeAction({
+      variables,
     });
   };
 

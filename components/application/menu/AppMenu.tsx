@@ -88,7 +88,7 @@ export default function AppMenu() {
 
   const [executeAction] = useExecuteActionMutation({
     onCompleted: (data) => {
-      console.log(data);
+      console.log("data", data);
       dispatch({
         type: OPEN_APP_DIALOG,
         payload: {
@@ -118,17 +118,19 @@ export default function AppMenu() {
             <MenuItem
               key={appShortcut?.id}
               onClick={() => {
-                executeAction({
-                  variables: {
-                    input: {
-                      action: appShortcut.actionId,
-                      appId: selectedApp?.id ?? "",
-                      brandId: "chat",
-                      channel: "channel",
-                      roomId: "room",
-                      tenantId: "chat",
-                    },
+                const variables = {
+                  input: {
+                    action: appShortcut.actionId,
+                    appId: selectedApp?.id ?? "",
+                    brandId: "chat",
+                    channel: "channel",
+                    roomId: "room",
+                    tenantId: "chat",
                   },
+                };
+                console.log("variables", variables);
+                executeAction({
+                  variables,
                 });
               }}
             >
@@ -186,17 +188,19 @@ export default function AppMenu() {
               <MenuItem
                 key={appShortcut?.id}
                 onClick={() => {
-                  executeAction({
-                    variables: {
-                      input: {
-                        action: appShortcut.actionId,
-                        appId: selectedApp?.id ?? "",
-                        brandId: "chat",
-                        channel: "channel",
-                        roomId: "room",
-                        tenantId: "chat",
-                      },
+                  const variables = {
+                    input: {
+                      action: appShortcut.actionId,
+                      appId: selectedApp?.id ?? "",
+                      brandId: "chat",
+                      channel: "channel",
+                      roomId: "room",
+                      tenantId: "chat",
                     },
+                  };
+                  console.log("variables", variables);
+                  executeAction({
+                    variables,
                   });
                 }}
               >

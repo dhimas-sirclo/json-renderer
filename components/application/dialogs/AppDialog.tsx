@@ -23,7 +23,7 @@ export default function AppDialog() {
 
   const [executeAction] = useExecuteActionMutation({
     onCompleted: (data) => {
-      console.log(data);
+      console.log("data", data);
       dispatch({
         type: OPEN_APP_DIALOG,
         payload: {
@@ -38,14 +38,19 @@ export default function AppDialog() {
   );
 
   useEffect(() => {
+    console.log("initialValues", initialValues);
+  }, [initialValues]);
+
+  useEffect(() => {
+    console.log("state", state);
+
     // reset
     setInitialValues({});
 
     const blocksTemp = state?.data?.blocks ?? [];
-    alert(JSON.stringify(blocksTemp, null, 2));
 
     // set
-    const initialValuesTemp = (state?.data?.blocks ?? []).reduce(
+    const initialValuesTemp = blocksTemp.reduce(
       (
         obj: { [key: string]: any },
         { type, input }: { type: string; input: { name: string; type: string } }
@@ -105,67 +110,71 @@ export default function AppDialog() {
         initialValues={initialValues}
         enableReinitialize
         onSubmit={async (values) => {
-          console.log(values);
-          executeAction({
-            variables: {
-              input: {
-                action: state?.data?.action?.id ?? "",
-                appId: "sirclo-store-v2",
-                brandId: "chat",
-                channel: "channel",
-                data: JSON.stringify(values),
-                roomId: "room",
-                tenantId: "chat",
-              },
+          const variables = {
+            input: {
+              action: state?.data?.action?.id ?? "",
+              appId: "sirclo-store-v2",
+              brandId: "chat",
+              channel: "channel",
+              data: JSON.stringify(values),
+              roomId: "room",
+              tenantId: "chat",
             },
+          };
+          console.log("variables", variables);
+          executeAction({
+            variables,
           });
         }}
       >
-        {({ isSubmitting }) => (
-          <Form
-            onKeyDown={(keyEvent) => {
-              if ((keyEvent.charCode || keyEvent.keyCode) === 13) {
-                keyEvent.preventDefault();
-              }
-            }}
-          >
-            <DialogTitle>
-              <Box
-                display="flex"
-                flexDirection="row"
-                alignItems="center"
-                justifyItems="center"
-              >
-                <Avatar
-                  src={state?.data?.title?.icon}
-                  alt={state?.data?.title?.text}
-                />
-                {state?.data?.title?.text}
-              </Box>
-            </DialogTitle>
-            <DialogContent>
-              <BlocksBuilder data={state?.data?.blocks} />
-            </DialogContent>
-            <DialogActions>
-              {(state?.data?.action?.buttons ?? []).map(
-                (button: { [key: string]: any }, i: number) => {
-                  return (
-                    <Button
-                      key={i}
-                      type={button.type === "cancel" ? "button" : button.type}
-                      onClick={handleClick(button.type, button.action?.id)}
-                      disabled={button.type === "submit" && isSubmitting}
-                    >
-                      {button.type === "submit" && isSubmitting
-                        ? "Loading..."
-                        : button.label}
-                    </Button>
-                  );
+        {({ isSubmitting, values }) => {
+          console.log("values", values);
+          return (
+            <Form
+              onKeyDown={(keyEvent) => {
+                if ((keyEvent.charCode || keyEvent.keyCode) === 13) {
+                  keyEvent.preventDefault();
                 }
-              )}
-            </DialogActions>
-          </Form>
-        )}
+              }}
+            >
+              <DialogTitle>
+                <Box
+                  display="flex"
+                  flexDirection="row"
+                  alignItems="center"
+                  justifyItems="center"
+                >
+                  <Avatar
+                    src={state?.data?.title?.icon}
+                    alt={state?.data?.title?.text}
+                  />
+                  {state?.data?.title?.text}
+                </Box>
+              </DialogTitle>
+              <DialogContent>
+                <BlocksBuilder data={state?.data?.blocks} />
+              </DialogContent>
+              <DialogActions>
+                {(state?.data?.action?.buttons ?? []).map(
+                  (button: { [key: string]: any }, i: number) => {
+                    return (
+                      <Button
+                        key={i}
+                        type={button.type === "cancel" ? "button" : button.type}
+                        onClick={handleClick(button.type, button.action?.id)}
+                        disabled={button.type === "submit" && isSubmitting}
+                      >
+                        {button.type === "submit" && isSubmitting
+                          ? "Loading..."
+                          : button.label}
+                      </Button>
+                    );
+                  }
+                )}
+              </DialogActions>
+            </Form>
+          );
+        }}
       </Formik>
     </Dialog>
   );
