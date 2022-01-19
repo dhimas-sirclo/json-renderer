@@ -40,6 +40,7 @@ export default function Radio({ name, label, options = [] }: RadioProps) {
                 control={<MuiRadio />}
                 label={option.label}
                 value={option.value}
+                checked={input.value === option.value}
               />
             );
           })}

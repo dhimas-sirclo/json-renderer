@@ -18,6 +18,33 @@ import {
 import BlocksBuilder from "../blocks/BlocksBuilder";
 import { useExecuteActionMutation } from "../../../graphql";
 
+function getInitialValues(
+  inObj: { [key: string]: any },
+  outObj: { [key: string]: any }
+): { [key: string]: any } {
+  for (var property in inObj) {
+    if (
+      typeof inObj[property] !== "object" &&
+      !Array.isArray(inObj[property])
+    ) {
+      continue;
+    }
+
+    // TODO: handle checkbox and fieldArray
+    if (property === "input") {
+      outObj[inObj[property].name] = inObj[property].value
+        ? inObj[property].value
+        : "";
+      continue;
+    }
+
+    console.log(property, inObj[property]);
+
+    outObj = { ...outObj, ...getInitialValues(inObj[property], outObj) };
+  }
+  return outObj;
+}
+
 export default function AppDialog() {
   const { state, dispatch } = useAppDialogCtx();
 
@@ -50,22 +77,7 @@ export default function AppDialog() {
     const blocksTemp = state?.data?.blocks ?? [];
 
     // set
-    const initialValuesTemp = blocksTemp.reduce(
-      (
-        obj: { [key: string]: any },
-        { type, input }: { type: string; input: { name: string; type: string } }
-      ) => {
-        if (type !== "input") {
-          return obj;
-        }
-        return {
-          ...obj,
-          [input.name]: input.type === "checkbox" ? [] : "",
-        };
-      },
-      {} as { [key: string]: any }
-    );
-    setInitialValues(initialValuesTemp);
+    setInitialValues(getInitialValues(blocksTemp, {}));
   }, [state]);
 
   const handleClose = () => {
