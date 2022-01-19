@@ -1,25 +1,36 @@
 {
-  "name": "builder",
+  "name": "json-renderer",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "generate": "graphql-codegen --config codegen.yml",
+    "prestart": "yarn generate",
+    "predev": "yarn generate"
   },
   "dependencies": {
+    "@apollo/client": "^3.5.6",
     "@emotion/react": "^11.7.1",
     "@emotion/styled": "^11.6.0",
+    "@graphql-codegen/fragment-matcher": "^3.2.1",
     "@mui/icons-material": "^5.2.5",
     "@mui/material": "^5.2.6",
-    "@types/lodash": "^4.14.178",
     "formik": "^2.2.9",
+    "graphql": "^16.2.0",
     "lodash": "^4.17.21",
     "next": "latest",
     "react": "17.0.2",
     "react-dom": "17.0.2"
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "2.3.1",
+    "@graphql-codegen/introspection": "2.1.1",
+    "@graphql-codegen/typescript": "2.4.2",
+    "@graphql-codegen/typescript-operations": "2.2.2",
+    "@graphql-codegen/typescript-react-apollo": "3.2.3",
+    "@types/lodash": "^4.14.178",
     "@types/node": "17.0.5",
     "@types/react": "17.0.38",
     "eslint": "8.5.0",

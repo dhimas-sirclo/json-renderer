@@ -1,0 +1,132 @@
+input InstalledApplicationsFilter {
+  tenantIds: [ID!]
+  brandIds: [ID!]
+  roomIds: [ID!]
+  channels: [ID!]
+  status: [String!]
+}
+
+input ApplicationShortcutsFilter {
+  appId: ID!
+  tenantIds: [ID!]
+  brandIds: [ID!]
+  roomIds: [ID!]
+  channels: [ID!]
+  status: [String!]
+}
+
+type ApplicationShortcut {
+  id: ID!
+  title: String!
+  description: String!
+  actionId: ID!
+}
+
+type InstalledApplication {
+  id: ID!
+  title: String!
+  description: String!
+}
+
+extend type Query {
+  applicationShortcuts(
+    filter: ApplicationShortcutsFilter
+  ): [ApplicationShortcut]
+  installedApplications(
+    filter: InstalledApplicationsFilter
+  ): [InstalledApplication]
+}
+
+input ExecuteActionInput {
+  appId: ID!
+  tenantId: ID!
+  brandId: ID!
+  roomId: ID!
+  channel: ID!
+  action: String!
+  """
+  JSON String
+  """
+  data: String
+}
+
+type BlockButtonAction {
+  id: String!
+}
+
+type BlockButtonDetail {
+  type: String
+  label: String!
+  action: BlockButtonAction
+}
+
+type DialogAction {
+  id: ID
+  buttons: [BlockButtonDetail]
+}
+
+type BlockInputOption {
+  label: String!
+  value: String!
+}
+
+type BlockInputDetail {
+  type: String!
+  name: String!
+  label: String
+  options: [BlockInputOption!]
+}
+
+union Block = BlockInput | BlockContainer | BlockButton | BlockImage
+
+type BlockContainer {
+  type: String!
+  container: BlockContainerDetail!
+}
+
+type BlockContainerDetail {
+  direction: String
+  blocks: [Block!]!
+}
+
+type BlockButton {
+  type: String!
+  button: BlockButtonDetail!
+}
+
+type BlockImage {
+  type: String!
+  image: BlockImageDetail!
+}
+
+type BlockImageDetail {
+  src: String!
+  alt: String
+}
+
+type BlockInput {
+  type: String!
+  input: BlockInputDetail
+}
+
+union ActionResponse = AppDialog | AppFeedback
+
+type AppDialog {
+  type: String!
+  title: DialogTitle!
+  action: DialogAction
+  blocks: [Block!]
+}
+
+type AppFeedback {
+  type: String!
+}
+
+type DialogTitle {
+  text: String
+  icon: String
+}
+
+extend type Mutation {
+  executeAction(input: ExecuteActionInput!): ActionResponse
+}

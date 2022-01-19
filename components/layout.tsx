@@ -1,5 +1,6 @@
 import { AppBar, Toolbar, Container, Typography, Paper } from "@mui/material";
 import Head from "next/head";
+import AppDialog from "./application/dialogs/AppDialog";
 
 export default function Layout({ children }: any) {
   return (
@@ -20,6 +21,7 @@ export default function Layout({ children }: any) {
           <main>{children}</main>
         </Container>
       </Paper>
+      <AppDialog />
     </>
   );
 }
