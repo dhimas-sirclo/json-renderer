@@ -273,7 +273,7 @@ const viewProduct: MockedResponse = {
 
 // searchResult -> addToCart
 // viewProduct -> addToCart
-const addToCart: MockedResponse = {
+const addToCartWithData: MockedResponse = {
   request: {
     query: ExecuteActionDocument,
     variables: {
@@ -286,6 +286,115 @@ const addToCart: MockedResponse = {
         tenantId: "chat",
         // data: `{\"sku\":\"black-jacket-m\"}`,
         data: `{}`,
+      },
+    },
+  },
+  result: {
+    data: {
+      executeAction: {
+        type: "dialog",
+        title: {
+          text: "Cart Items",
+          icon: "https://source.unsplash.com/random/50x50",
+        },
+        action: {
+          id: "updateCartItems",
+          buttons: [
+            {
+              type: "button",
+              label: "Search Product",
+              action: {
+                id: "searchProduct",
+              },
+            },
+            {
+              type: "cancel",
+              label: "Close",
+            },
+            {
+              type: "submit",
+              label: "Next",
+            },
+          ],
+        },
+        blocks: multiply({
+          type: "container",
+          container: {
+            direction: "row",
+            blocks: [
+              {
+                type: "image",
+                image: {
+                  src: "https://source.unsplash.com/random/50x50",
+                  alt: "Jacket",
+                },
+              },
+              {
+                type: "container",
+                container: {
+                  blocks: [
+                    {
+                      type: "text",
+                      text: {
+                        body: "Jacket",
+                      },
+                    },
+                    {
+                      type: "text",
+                      text: {
+                        body: "Black, M",
+                      },
+                    },
+                    {
+                      type: "text",
+                      text: {
+                        body: "jacket-black-m",
+                      },
+                    },
+                  ],
+                },
+              },
+              {
+                type: "text",
+                text: {
+                  body: "IDR 100.000,00",
+                },
+              },
+              {
+                type: "input",
+                input: {
+                  type: "number",
+                  name: "jacket-black-m",
+                  label: "Quantity",
+                  value: 1,
+                },
+              },
+              {
+                type: "button",
+                button: {
+                  label: "Remove",
+                },
+              },
+            ],
+          },
+        }),
+      },
+    },
+  },
+};
+const addToCartWithoutData: MockedResponse = {
+  request: {
+    query: ExecuteActionDocument,
+    variables: {
+      input: {
+        action: "addToCart",
+        appId: "sirclo-store-v2",
+        brandId: "chat",
+        channel: "channel",
+        roomId: "room",
+        tenantId: "chat",
+        // data: `{\"sku\":\"black-jacket-m\"}`,
+        // data: `{}`,
       },
     },
   },
@@ -908,7 +1017,8 @@ const mocks = [
   searchProduct,
   searchProductWithData,
   viewProduct,
-  addToCart,
+  addToCartWithData,
+  addToCartWithoutData,
   viewCart,
   updateCartItems,
   setShippingAddress,
